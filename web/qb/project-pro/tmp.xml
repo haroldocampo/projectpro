@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<?qbxml version="4.0"?>
+<QBXML>
+	<QBXMLMsgsRq onError="continueOnError">
+		<BillAddRq requestID="1">
+			<BillAdd>
+				<VendorRef>
+					<FullName>DELL Computer Ltd</FullName>
+				</VendorRef>
+				<TxnDate>2010-10-17</TxnDate>
+				<DueDate />
+				<RefNumber />
+				<TermsRef>
+					<FullName>N/A</FullName>
+				</TermsRef>
+				<Memo />
+				<ExpenseLineAdd>
+					<AccountRef>
+						<FullName>Automobile Expense</FullName>
+					</AccountRef>
+					<Amount>1000.00</Amount>
+					<Memo>Test Comments</Memo>
+				</ExpenseLineAdd>
+				<ExpenseLineAdd>
+					<AccountRef>
+						<FullName>Computer and Internet Expenses</FullName>
+					</AccountRef>
+					<Amount>555.15</Amount>
+					<Memo>Test Comments</Memo>
+				</ExpenseLineAdd>
+				<ItemLineAdd>
+					<ItemRef>
+						<FullName>Digital Camera</FullName>
+					</ItemRef>
+					<Desc>Digital Camera</Desc>
+					<Quantity>2</Quantity>
+					<Cost>6500.00</Cost>
+					<Amount>13000.00</Amount>
+				</ItemLineAdd>
+				<ItemLineAdd>
+					<ItemRef>
+						<FullName>Laser Printer</FullName>
+					</ItemRef>
+					<Desc>Laser Printer</Desc>
+					<Quantity>1</Quantity>
+					<Cost>5000.00</Cost>
+					<Amount>5000.00</Amount>
+				</ItemLineAdd>
+			</BillAdd>
+		</BillAddRq>
+	</QBXMLMsgsRq>
+</QBXML>
+
+<?xml version="1.0" ?>
+<?qbxml version="4.0"?>
+<QBXML>
+	<QBXMLMsgsRq onError="stopOnError">
+		<VendorAddRq requestID="1">
+			<VendorAdd>
+				<Name>DELL Computer Ltd</Name>
+				<IsActive>1</IsActive>
+			</VendorAdd>
+		</VendorAddRq>
+	</QBXMLMsgsRq>
+</QBXML>

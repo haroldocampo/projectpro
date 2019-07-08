@@ -1,0 +1,8 @@
+
+app/config/parameters.yml.dist
+app/config/config_test.yml
+app/config/config.yml
+app/config/config_dev.yml
+app/config/config_prod.yml
+app/config/config_staging.yml
+app/config/parameters.yml

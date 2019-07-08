@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+{% block pageheader %}Vendors{% endblock %}
+{% block body %}
+    <div class="setup-wizard-container hide page-help resizable">
+        <div class="setup-wizard-header">
+            <h4>HELP</h4>
+            <div class="dialog-close" onclick="closeHelp()">x</div>
+        </div>
+        <div class="setup-wizard-content" style="white-space: pre-line;">
+            <h5 style="text-align: center;">VENDORS</h5>
+            ...
+        </div>
+        <div class="setup-wizard-footer">
+            <button class="btn btn-secondary" onclick="closeHelp();">Close</button>
+        </div>
+    </div>
+    <div data-ng-controller="VendorController">
+        <input type="hidden" name="companyId" id="companyId" value="{{ companyId }}"/>
+        <input type="hidden" name="employeeId" id="employeeId" value="{{ EmployeeId }}" /> 
+        {#<div class="row m-b-20">
+            <div class="col-xs-7">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="text" style="width: 200px;" class="form-control" data-ng-model="newPaymentType.name" placeholder="Type Payment Type Here">
+                    </div>
+                    <button class="btn btn-success" data-ng-click="addPaymentType()">Add Payment Type</button>
+                </div>
+
+            </div>
+        </div>#}
+        <div class="row">
+            <div class="col-xs-6 col-xs-offset-3" style="padding-bottom: 5px;">                
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="col-xs-12">                            
+                                <input id="vendorName" data-ng-class="{'border-red' : validName  == false}" placeholder="Vendor Name" data-ng-model="newName" type="text" class="form-control">
+                                <button id="addVendor" type="button" class="btn btn-primary" data-ng-click="addVendor()">Add</button>                                                            
+                        </div>
+                        <div class="col-xs-12">
+                        <span ng-show="validName  == false"><small style="color:red;">Please input a vendor name.</small></span>                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="col-xs-6 col-xs-offset-3 m-t-10">
+                <div class="card-box">
+
+                    <!-- Change color of red to grey -->
+                    <div class="p-20">
+                        <table class="table">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th style="width: 80%;">Vendor</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="v in vendors">
+                                    <td data-ng-show="!isEditing && !isMerging">{[v.name]}</td>
+                                    <td data-ng-show="isEditing"><input style="width: 180px; display: inline;" type="text" class="form-control" data-ng-model="v.name"/></td>
+                                    <td data-ng-show="isMerging">
+                                        <select data-ng-options = "ven as ven.name for ven in vendors | filter: {id: '!' + v.id}" 
+                                            ng-model="mVendor" style"width:300px;" ng-change="setMergeItem(mVendor)">
+                                            <option value="">Select Vendor to merge with</option>    
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            <i class="fa fa-edit click" style="color: #717171; font-size: 25px;" data-ng-show="!isEditing" data-ng-click="isEditing = true; isMerging = false;"></i>
+                                            <i class="fa fa-check click" style="color: #717171; font-size: 25px;" data-ng-show="isEditing" data-ng-click="editVendor(v)"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" data-ng-show="!isMerging" data-ng-click="isMerging = true; isEditing = false; mergeItem = null">Merge</button>
+                                        <button class="btn btn-primary" data-ng-show="isMerging" data-ng-click="mergeVendors(v)">Apply</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .border-red {
+            border-color: red !important;
+        }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $('#vendorName').keyup(function(e){
+        if(e.keyCode == 13)
+        {
+            $('#addVendor').trigger("click");
+            $(this).val('');
+        }
+    });
+</script>
+{% endblock %}

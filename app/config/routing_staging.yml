@@ -1,0 +1,12 @@
+app_web:
+    resource: '@AppBundle/Controller/Web'
+    type: annotation    
+
+app_api:
+    resource: '@AppBundle/Controller/Api'
+    type: annotation    
+
+
+# FOSUserBundle Routing
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

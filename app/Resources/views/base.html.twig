@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Project Pro">
+        <meta name="author" content="Harold Ocampo">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>
+            {% block title %}Project Pro{% endblock %}
+        </title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/pprologo.png') }}"/>
+        <link href="{{ asset('uplon/assets/plugins/toastr/toastr.min.css') }}" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="{{ asset('uplon/assets/plugins/morris/morris.css') }}">
+        <link href="{{ asset('uplon/assets/plugins/switchery/switchery.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('uplon/assets/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('uplon/assets/css/style.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('uplon/assets/public/stylesheets/style.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('bower_components/ekko-lightbox/dist/ekko-lightbox.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('bower_components/angular-ui-select/dist/select.min.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('font-awesome/css/font-awesome.css') }}" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link href="{{ asset('uplon/assets/css/overrides.css') }}" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="{{ asset('bower_components/bootstrap-select/dist/css/bootstrap-select.min.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('bower_components/angular-loading/loading-bar.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('bower_components/drift/dist/Drift.min.js') }}"/>
+        <script src="{{ asset('uplon/assets/js/modernizr.min.js') }}"></script>
+        <!--[if !IE]><!-->
+        <link href="{{ asset('uplon/assets/css/ie-overrides.css') }}" rel="stylesheet" type="text/css"/>
+        <!--<![endif]-->
+        <style>
+            .ng-cloak,
+            .x-ng-cloak,
+            [data-ng-cloak],
+            [ng-cloak],
+            [ng\:cloak],
+            [x-ng-cloak] {
+                display: none !important;
+            }
+            .click{
+                cursor: pointer;
+            }
+        </style>
+
+        <!-- link to the SqPaymentForm library -->
+        <script type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
+
+        <!-- link to the local SqPaymentForm initialization -->
+        <script type="text/javascript" src="{{ asset('sqpayment/sqpaymentform.js') }}"></script>
+
+        <!-- link to the custom styles for SqPaymentForm -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('sqpayment/sqpaymentform.css') }}">
+
+    </head>
+    <body data-ng-app="ProjexApp" class="ng-cloak">
+
+        <!-- Navigation Bar-->
+        <header id="topnav">
+            <div class="topbar-main">
+                <div data-ng-controller="CompanyController" class="container relative">
+
+                    <!-- LOGO -->
+                    <div class="topbar-left">
+                        <a href="#" class="logo">
+                            <img src="{{ asset('images/logo-web-banner.png') }}"/>
+                        </a>
+                    </div>
+
+                    <div style="display: none;">
+                        <div class="upgrade-section">
+                            <span data-ng-if="!processingPayment">{[trialDaysLeft]} Days Left in Free Trial</span>
+                            <a href="/dashboard/company/{{ companyId }}/account">
+                                <button data-ng-if="!processingPayment" data-toggle="modal" data-target="#creditCartModal">UPGRADE NOW</button>
+                            </a>
+                            <span data-ng-if="processingPayment">Processing Payment</span>
+
+                        </div>
+                    </div>
+
+                    <div data-ng-controller="CompaniesController" class="btn-group company-section" style="">
+                        <button type="button" style="" class="btn bg-white border dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">{[ selectedCompany ]}<span class="caret" style="margin-left: 7px;"></span>
+                        </button>
+                        <div class="dropdown-menu" style="overflow: scroll; height: auto; max-height: 350px;">
+                            {% if is_granted('ROLE_ADMIN') or employeeRecord.hasRole('ROLE_ADMIN') %}
+                                <a class="dropdown-item" style="color: #FFF;background: #315da6;" data-toggle="modal" data-target="#newCompanyModal">Create New Company</a>
+                            {% endif %}
+                            <a class="dropdown-item" data-ng-repeat="c in companies" data-ng-href="/dashboard/company/{[ c.id ]}">{[ c.name ]}</a>
+                            {#{% if employeeRecord.hasRole('ROLE_ADMIN') %}#}
+                            {#<a class="dropdown-item" data-ng-repeat="c in companies" data-ng-href="/dashboard/company/{[ c.id ]}">{[ c.name ]}</a>#}
+                            {#{% elseif employeeRecord.hasRole('ROLE_APPROVER') %}#}
+                            {#<a class="dropdown-item" data-ng-repeat="c in companies" data-ng-href="/dashboard/company/{[ c.id ]}">{[ c.name ]}</a>#}
+                            {#{% elseif employeeRecord.hasRole('ROLE_ACCOUNTANT') %}#}
+                            {#<a class="dropdown-item" data-ng-repeat="c in companies" data-ng-href="/dashboard/company/{[ c.id ]}">{[ c.name ]}</a>#}
+                            {#{% endif %}#}
+                            {#<a class="dropdown-item" style="color: #FFF;background: #315da6;" data-toggle="modal" data-target="#newCompanyModal" >Create New Company</a>#}
+                        </div>
+                    </div>
+                    <!-- End Logo container-->
+
+                    <div class="menu-extras">
+
+                        <ul class="nav navbar-nav pull-right">
+
+                            <li class="nav-item">
+                                <!-- Mobile menu toggle-->
+                                <a class="navbar-toggle">
+                                    <div class="lines">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </a>
+                                <!-- End mobile menu toggle-->
+                            </li>
+
+                            <li class="nav-item dropdown notification-list" data-ng-controller="MenuController">
+                                <a class="nav-link dropdown-toggle arrow-none waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <span class="hello-name">Hello
+                                        {{ app.user.firstName }}
+                                        {{ app.user.lastName }}!</span>
+                                    <img src="{{ asset('images/user-image.png') }}" alt="user" class="img-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-arrow profile-dropdown " aria-labelledby="Preview">
+                                    <!-- item-->
+                                    <div class="dropdown-item noti-title">
+                                        <h5 class="text-overflow">
+                                            <small>{{ app.user.firstName }}
+                                                {{ app.user.lastName }}</small>
+                                        </h5>
+                                    </div>
+
+                                    {% if is_granted('ROLE_ADMIN') or employeeRecord.hasRole('ROLE_ADMIN') %}
+                                        <a data-ng-if="billingPortalLink" data-ng-href="{[billingPortalLink]}" class="dropdown-item notify-item">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                            <span>Update Billing</span>
+                                        </a>
+                                    {% endif %}
+                                </a>
+                                <a data-ng-if="companyId == 79" data-ng-click="resetDemo()" href="javascript:void(0);" class="dropdown-item notify-item">
+                                    <i class="zmdi zmdi-power"></i>
+                                    <span>Reset Demo</span>
+                                </a>
+                                
+                                <a href="{{ path('fos_user_security_logout') }}" class="dropdown-item notify-item">
+                                    <i class="zmdi zmdi-power"></i>
+                                    <span>Logout</span>
+                                </a>
+
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+                <!-- end menu-extras -->
+                <div class="clearfix"></div>
+
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end topbar-main -->
+
+        <div class="navbar-custom">
+            <div class="container">
+                <div id="navigation">
+                    <!-- Navigation Menu-->
+                    <ul class="navigation-menu">
+                        {#<li>
+                            <a href="{{ path('dashboardPage') }}"><i class="zmdi zmdi-view-dashboard"></i>
+                                <span> Dashboard </span> </a>
+                        </li>#}
+
+                        <li class="{% if (is_granted('ROLE_ADMIN') or employeeRecord.hasRole('ROLE_ACCOUNTANT')) == false %}invisible{% endif %} accountant-link">
+                            <a href="{{ path('showCompanyAccountantDashboard', {'id': companyId}) }}">
+                                <i class="zmdi zmdi-account"></i>
+                                <span>
+                                    Accountant
+                                </span>
+                            </a>
+                        </li>
+                        <li class="{% if (is_granted('ROLE_ADMIN') or employeeRecord.hasRole('ROLE_APPROVER')) == false %}invisible{% endif %} approver-link">
+                            <a href="{{ path('showCompanyApproverDashboard', {'id': companyId}) }}">
+                                <i class="zmdi zmdi-account"></i>
+                                <span>
+                                    Approver
+                                </span>
+                            </a>
+                        </li>
+                        <!--<li> <a href="/dashboard/accountant"><i class="zmdi zmdi-account"></i> <span> Accountant </span> </a> </li> <li> <a href="/dashboard/approver"><i class="zmdi zmdi-account"></i> <span> Approver </span> </a> </li> -->
+                        {#
+                                                    <li class="has-submenu">
+                                                        <a href="#"><i class="zmdi zmdi-format-underlined"></i> <span> User Interface </span> </a>
+                                                        <ul class="submenu megamenu">
+                                                            <li>
+                                                                <ul>
+                                                                    <li><a href="ui-buttons.html">Buttons</a></li>
+                                                                    <li><a href="ui-cards.html">Cards</a></li>
+                                                                    <li><a href="ui-dropdowns.html">Dropdowns</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                <ul>
+                                                                    <li><a href="ui-notification.html">Notification</a></li>
+                                                                    <li><a href="ui-carousel.html">Carousel</a></li>
+                                                                    <li><a href="components-grid.html">Grid</a></li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                        #}
+
+                    </ul>
+                    <button type="button" onclick="openHelp()" class="btn btn-outline-dark btn-rounded waves-effect waves-light pull-right" style="padding: 5px 17px;margin-top: 11px;margin-left: 20px;background: transparent;border: solid 1px #000;font-size: 20px;">
+                        ?
+                    </button>
+                    <div class="btn-group pull-right m-t-15">
+                        <button type="button" style="background: #FFF;border: solid 1px #ccc;" class="btn bg-white border dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-bell"></i>
+                            Reminders<span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                            {% if is_granted('ROLE_ADMIN') or employeeRecord.hasRole('ROLE_ACCOUNTANT') or employeeRecord.hasRole('ROLE_APPROVER') %}
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#sendReminderNowApproversModal">Send Reminder Now (Approvers)</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#sendReminderNowPurchasersModal">Send Reminder Now (Purchasers)</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#scheduleReminderApproversModal">Schedule Reminders (Approvers)</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#scheduleReminderPurchasersModal">Schedule Reminders (Purchasers)</a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if is_granted('ROLE_ADMIN') or employeeRecord.hasRole('ROLE_ADMIN') %}
+                        <div class="admin-link btn-group pull-right m-t-15">
+                            <button type="button" style="background: #FFF;border: solid 1px #ccc; margin-right: 10px;" class="btn bg-white border dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-gear"></i>
+                                Administration<span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ path('showCompanyAccountDashboard', {'id': companyId}) }}">Account</a>         
+                                {# {% if isQbIntegrated %}                   #}
+                                <a class="dropdown-item" href="{{ path('classesCompanyDashboard', {'id': companyId}) }}">Classes</a>
+                                {# {% endif %} #}
+                                <a class="dropdown-item" href="{{ path('dashboardAdminUsersCompanyPage', {'id': companyId}) }}">Users</a>
+                                <a class="dropdown-item" href="{{ path('showCompanyAdminDashboard', {'id': companyId}) }}">Jobs, Items & Accounts</a>
+                                <a class="dropdown-item" href="{{ path('showCompanyPaymentTypesDashboard', {'id': companyId}) }}">Payment Types</a>
+                                {# {% if isQbIntegrated %} #}
+                                <a class="dropdown-item" href="{{ path('vendorsCompanyDashboard', {'id': companyId}) }}">Vendors</a>                                
+                                {# <a class="dropdown-item" href="{{ path('apiExportQbExceptions', {'id': companyId}) }}">QB Errors</a>                                 #}
+                                {# {% endif %} #}
+                                {#% if app.user.isDoneWizard %#}
+                                {% if not is_granted('ROLE_ADMIN') %}
+                                    <a class="dropdown-item" href="{{ path('showSetupWizardDashboard', {'id': companyId, 'employeeId': employeeRecord.id}) }}">Open Set-Up Wizard</a>
+                                {% endif %}
+                                {#% endif %#}
+                            </div>
+                        </div>
+                        <input type="hidden" id="isAdmin" value="true"/>
+                    {% endif %}
+
+                    <!-- End navigation menu -->
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Navigation Bar-->
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="wrapper">
+        <div class="container">
+
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+
+                    {#
+                <div class="btn-group pull-right m-t-15">
+                    <button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light"
+                            data-toggle="dropdown" aria-expanded="false">Actions <span class="m-l-5"><i
+                                class="fa fa-cog"></i></span></button>
+                    <div class="dropdown-menu">
+    
+    
+                        <!--a class="dropdown-item" href="#" data-toggle="modal" data-target="#sendRecurringReminderModal">Schedule Recurring Reminder</a-->
+    
+                        <a class="dropdown-item" href="#">Help (About this page)</a>
+                    </div>
+    
+                </div>
+                    #}
+                    <h4 class="page-title">
+                        {% block pageheader %}{% endblock %}
+                    </h4>
+                </div>
+            </div>
+
+            {% block body %}{% endblock %}
+
+            <!-- Footer -->
+            <footer class="footer text-right">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            2017 © ProjectPro.
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- End Footer -->
+
+        </div>
+        <!-- container -->
+
+        <!-- Right Sidebar -->
+        <!-- <div class="side-bar right-bar"> <div class="nicescroll"> <ul class="nav nav-tabs text-xs-center"> <li class="nav-item"> <a href="#home-2" class="nav-link active" data-toggle="tab" aria-expanded="false"> Activity </a> </li> <li class="nav-item"> <a href="#messages-2" class="nav-link" data-toggle="tab" aria-expanded="true"> Settings </a> </li> </ul> <div class="tab-content"> <div class="tab-pane fade in active" id="home-2"> <div class="timeline-2"> <div class="time-item"> <div class="item-info"> <small class="text-muted">5 minutes ago</small> <p><strong><a href="#" class="text-info">John Doe</a></strong> Uploaded a photo <strong>"DSC000586.jpg"</strong></p> </div> </div> <div class="time-item"> <div class="item-info"> <small class="text-muted">30 minutes ago</small> <p><a href="" class="text-info">Lorem</a> commented your post.</p> <p><em>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet tellus ut tincidunt euismod. "</em></p> </div> </div> <div class="time-item"> <div class="item-info"> <small class="text-muted">59 minutes ago</small> <p><a href="" class="text-info">Jessi</a> attended a meeting with<a href="#" class="text-success">John Doe</a>.</p> <p><em>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet tellus ut tincidunt euismod. "</em></p> </div> </div> <div class="time-item"> <div class="item-info"> <small class="text-muted">1 hour ago</small> <p><strong><a href="#" class="text-info">John Doe</a></strong>Uploaded 2 new photos</p> </div> </div> <div class="time-item"> <div class="item-info"> <small class="text-muted">3 hours ago</small> <p><a href="" class="text-info">Lorem</a> commented your post.</p> <p><em>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet tellus ut tincidunt euismod. "</em></p> </div> </div> <div class="time-item"> <div class="item-info"> <small class="text-muted">5 hours ago</small> <p><a href="" class="text-info">Jessi</a> attended a meeting with<a href="#" class="text-success">John Doe</a>.</p> <p><em>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet tellus ut tincidunt euismod. "</em></p> </div> </div> </div> </div> <div class="tab-pane fade" id="messages-2"> <div class="row m-t-20"> <div class="col-xs-8"> <h5 class="m-0">Notifications</h5> <p class="text-muted m-b-0"><small>Do you need them?</small></p> </div> <div class="col-xs-4 text-right"> <input type="checkbox" checked data-plugin="switchery" data-color="#64b0f2" data-size="small"/> </div> </div> <div class="row m-t-20"> <div class="col-xs-8"> <h5 class="m-0">API Access</h5> <p class="m-b-0 text-muted"><small>Enable/Disable access</small></p> </div> <div class="col-xs-4 text-right"> <input type="checkbox" checked data-plugin="switchery" data-color="#64b0f2" data-size="small"/> </div> </div> <div class="row m-t-20"> <div class="col-xs-8"> <h5 class="m-0">Auto Updates</h5> <p class="m-b-0 text-muted"><small>Keep up to date</small></p> </div> <div class="col-xs-4 text-right"> <input type="checkbox" checked data-plugin="switchery" data-color="#64b0f2" data-size="small"/> </div> </div> <div class="row m-t-20"> <div class="col-xs-8"> <h5 class="m-0">Online Status</h5> <p class="m-b-0 text-muted"><small>Show your status to all</small></p> </div> <div class="col-xs-4 text-right"> <input type="checkbox" checked data-plugin="switchery" data-color="#64b0f2" data-size="small"/> </div> </div> </div> </div> </div> </div> -->
+        <!-- /Right-bar -->
+
+    </div>
+    <!-- End wrapper -->
+    <div data-ng-controller="CreateCompanyController">
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="newCompanyModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">New Company</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" data-ng-model="companyName"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" data-ng-click="addCompany()" class="btn btn-primary">Continue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Credit Card Controller Here, now moved to account.html.twig -->
+
+    <div data-ng-controller="ReminderController">
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="sendReminderNowPurchasersModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Send Reminder to Purchasers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group row">
+                                <label class="col-sm-2"></label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox21" type="checkbox" disabled="true" checked="true">
+                                        <label for="checkbox21">
+                                            Send to All
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="sendReminderPurchasers()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="sendReminderNowApproversModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Send Reminder to Approvers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group row">
+                                <label class="col-sm-2"></label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox21" type="checkbox" disabled="true" checked="true">
+                                        <label for="checkbox21">
+                                            Send to All
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="sendReminderApprovers()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="scheduleReminderPurchasersModal" data-ng-init="getScheduledRemindersPurchaser()">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Schedule Reminder to Purchasers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group row">
+                                <label class="col-sm-2"></label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox21" type="checkbox" disabled="true" checked="true">
+                                        <label for="checkbox21">
+                                            Send to All
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Days</label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox checkbox-primary" data-ng-repeat="role in listDaysP">
+                                        <input id="role{[role.name]}" name="role{[role.name]}" data-ng-model="role.checked" type="checkbox">
+                                        <label for="role{[role.name]}">
+                                            {[role.name]}
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="scheduleReminderPurchasers()">
+                            Schedule
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="scheduleReminderApproversModal" data-ng-init="getScheduledRemindersApprover()">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Schedule Reminder to Approvers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group row">
+                                <label class="col-sm-2"></label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox21" type="checkbox" disabled="true" checked="true">
+                                        <label for="checkbox21">
+                                            Send to All
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Days</label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox checkbox-primary" data-ng-repeat="role in listDaysA">
+                                        <input id="role{[role.name]}" name="role{[role.name]}" data-ng-model="role.checked" type="checkbox">
+                                        <label for="role{[role.name]}">
+                                            {[role.name]}
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="scheduleReminderApprovers()">Schedule
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" modal-window="modal-window" tabindex="-1" role="document" id="helpModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">About this Page</h5>
+                        <div class="dialog-close">x</div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="top: -20px;position: relative;">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% if helpcontent is defined %}{{ helpcontent }}
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Got it!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-ng-controller="ExpiredController" class="modal fade bs-example-modal-sm" modal-window="modal-window" tabindex="-1" role="document" id="expiredModalAdmin">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">ACCOUNT EXPIRED</h5>
+                    </div>
+                    <div class="modal-body">
+                        <h5 style="
+                        text-align: center;
+                        text-transform: uppercase;
+                        ">No valid credit card on file. As administrator please click on the button below to update your account.</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="/dashboard/company/{{ companyId }}/account?error=Please%20Edit%20Billing%20Info%20to%20continue%20using%20ProjectPro">
+                            <button type="button" class="btn btn-primary">Update Billing Now
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" modal-window="modal-window" tabindex="-1" role="document" id="expiredModalUser">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">ACCOUNT EXPIRED</h5>
+                    </div>
+                    <div class="modal-body">
+                        <h5 style="
+                        text-align: center;
+                        text-transform: uppercase;
+                        ">No valid credit card on file. Please ask a company Administrator to log into ProjectPro and enter a valid credit card.</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ path('fos_user_security_logout') }}">
+                            <button type="button" class="btn btn-primary">Logout
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            #setupWizard {
+                height: 500px;
+                width: 400px;
+                background: #ccc;
+                position: absolute;
+                top: 100px;
+                right: 20px;
+                z-index: 9999;
+            }
+
+            #setupWizard .head {
+                background: #3c6bb7;
+                color: #FFF;
+                height: 40px;
+                text-align: center;
+                padding-top: 8px;
+            }
+
+            #setupWizard .content {
+                padding: 10px;
+                min-height: 400px;
+            }
+
+            #setupWizard .foot {
+                background: #eceeef;
+                height: 60px;
+                border: 1px solid #bfbfbf;
+                padding: 10px;
+            }
+        </style>
+        <!-- <div id="setupWizard"> <div class="head"> <h4>Setup Wizard</h4> </div> <div class="content"> <p>Welcome to the setup wizard</p> </div> <div class="foot"> <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> <button type="button" class="btn btn-primary" data-ng-click="scheduleReminderApprovers()">Schedule</button> </div> </div> -->
+
+    </div>
+
+    <script>
+        var resizefunc = [];
+        var applicationUserId = '{{ app.user.id }}';
+        //$("#setupWizard").draggable({
+        //    handle: "#setupWizard .head"
+        //});
+    </script>
+
+    <!-- jQuery -->
+    <script src="{{ asset('uplon/assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/tether.min.js') }}"></script>
+    <!-- Tether for Bootstrap -->
+    <script src="{{ asset('uplon/assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/waves.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/jquery.nicescroll.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/plugins/switchery/switchery.min.js') }}"></script>
+
+    <!--Morris Chart-->
+    <script src="{{ asset('uplon/assets/plugins/morris/morris.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/plugins/morris/morris.min.js') }}"></script>
+
+    <!-- Counter Up -->
+    <script src="{{ asset('uplon/assets/plugins/morris/morris.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/plugins/counterup/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/plugins/toastr/toastr.min.js') }}"></script>
+
+    <!-- App js -->
+    <script src="{{ asset('uplon/assets/js/jquery.core.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/jquery.app.js') }}"></script>
+    <!-- responsive-table-->
+    <script src="{{ asset('uplon/assets/plugins/RWD-Table-Patterns/js/rwd-table.min.js') }}" type="text/javascript"></script>
+
+    <script src="{{ asset('bower_components/angular/angular.js') }}"></script>
+    <script src="{{ asset('bower_components/moment/min/moment.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/jquery.priceformat.js') }}"></script>
+    <script src="{{ asset('bower_components/ekko-lightbox/dist/ekko-lightbox.js') }}"></script>
+    <script src="{{ asset('bower_components/angular-fcsa-number/src/fcsaNumber.min.js') }}"></script>
+    <script src="{{ asset('bower_components/angular-ui-select/dist/select.js') }}"></script>
+    <script src="{{ asset('bower_components/angular-sanitize/angular-sanitize.min.js') }}"></script>
+    <script src="{{ asset('bower_components/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ asset('bower_components/angular-loading/loading-bar.js') }}"></script>
+    <script src="{{ asset('bower_components/drift/dist/Drift.min.js') }}"></script>
+    <script src="{{ asset('bower_components/jquery-form/jquery.form.js') }}"></script>
+    <script src="{{ asset('core/application.js') }}"></script>
+
+    <script>
+        {% if error is defined and error is not null and error is not empty %}
+            toastr.error('{{ error }}', 'Payment Failed');
+        {% endif %}
+        $('img').error(function () {
+            $(this).attr('src', '{{ asset("images/missing_image.png") }}' );
+        });        
+    </script>
+
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% extends '@FOSUser/fos_base.html.twig' %}
+
+{% block content %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="wrapper">
+        <div class="container">
+
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                </div>
+            </div>
+            <div class="row m-t-20">
+                <div class="col-xs-12 col-lg-6 col-lg-offset-3">
+                    <div class="card-box">
+
+                        <h2 class="m-t-0 m-b-20">Something went wrong. Please try registering again.</h2>
+                        <p>{{ error }}</p>
+                        <a href="/register" class="btn btn-primary">Go back to Register</a>
+                    </div>
+                </div><!-- end col-->
+            </div>
+
+        </div> <!-- container -->
+
+
+
+    </div> <!-- End wrapper -->
+{% endblock %}
+

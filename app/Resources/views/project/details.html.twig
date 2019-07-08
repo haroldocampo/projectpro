@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+{% block pageheader %}Approver Dashboard{% endblock %}
+{% block body %}
+<div data-ng-controller="DashboardController">
+<div class="row">
+                    <div class="col-xs-12">
+                        <div class="card-box">
+
+                            <h3>Projects</h3>
+                            <div class="p-20">
+                                        <table class="table">
+                                            <thead class="thead-default">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Project Name</th>
+                                                <th>Date Submitted</th>
+                                                <th>Amount</th>
+                                                <th>Payment Type</th>
+                                                <th>Submitted By</th>
+                                                <th>Approver</th>
+                                                <th>Date Approved</th>
+                                                <th>Date Exported</th>
+                                                <th style="width: 70px;"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-repeat="p in purchases">
+                                                <td>#</td>
+                                                <td>Purchase Date</td>
+                                                <td>Payment Type</td>
+                                                <td>Amount</td>
+                                                <td>Submitted By</td>
+                                                <td>Approver</td>
+                                                <td>Date Approved</td>
+                                                <td>Date Exported</td>
+                                                <th style="width: 70px;"></th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                        </div>
+                    </div>
+                </div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="sendReminderNowModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mySmallModalLabel">Send Reminder to Approvers</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-2"></label>
+                        <div class="col-sm-10">
+                            <div class="checkbox checkbox-primary">
+                                <input id="checkbox21" type="checkbox" checked=true>
+                                <label for="checkbox21">
+                                    Send to All
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="sendRecurringReminderModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mySmallModalLabel">Send Reminder to Approvers</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-2"></label>
+                        <div class="col-sm-10">
+                            <div class="checkbox checkbox-primary">
+                                <input id="checkbox21" type="checkbox" checked=true>
+                                <label for="checkbox21">
+                                    Send to All
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                            <label class="col-sm-2">Days</label>
+                            <div class="col-sm-10">
+                                <div class="checkbox checkbox-primary" data-ng-repeat="d in listDays">
+                                    <input id="role{[d.name]}" name="role{[d.name]}" data-ng-model="d.checked" type="checkbox">
+                                    <label for="role{[d.name]}">
+                                        {[d.name]}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

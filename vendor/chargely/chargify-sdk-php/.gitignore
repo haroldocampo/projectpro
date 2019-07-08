@@ -1,0 +1,14 @@
+# DS_Store
+.DS_Store
+
+# PHPStorm project files
+.idea/
+
+vendor/
+composer.lock
+
+docs/build
+
+tests/phpunit/artifacts/
+tests/phpunit/configs/ClientConfig.Dev.php
+tests/phpunit/configs/ClientV2Config.Dev.php

@@ -1,0 +1,31 @@
+<h3>Hello <b>{% if user.firstName == '' %}{{ user.email }}{% else %}{{ user.firstName }}{% endif %}</b>,</h3>
+<p><b>{{ admin.firstName }} {{ admin.LastName }}</b>
+
+    {% if passwordSetUrl is not null %}
+    would like you to sign up for ProjectPro to manage field purchases for <b>{{ companyName }}</b>. </p>
+
+<p><a href="{{ passwordSetUrl }}">Click Here</a> To set your password</p>
+
+<p>After setting your password, please download the Projex app to your mobile device. You may log into the Desktop App
+    at <a href="http://www.projectprohub.com">www.projectprohub.com</a> . You will have access to the functions checked
+    below</p>
+{% else %}
+    would like you to manage field purchases for {{ companyName }}. </p>
+    {# show company link #}
+
+    <p>You may log into the Desktop App at <a href="http://www.projectprohub.com">www.projectprohub.com</a> . You will
+        have access to the functions checked below</p>
+{% endif %}
+
+<ul style="list-style-type: none; font-weight: bold;">
+    <li>Submit Purchases on ProjEx (Mobile App)</li>
+    <li>Approve Purchases on ProjectPro (Desktop App)</li>
+    <li><b>X</b> Accounting Functions on ProjectPro (Desktop App)</li>
+</ul>
+
+
+<p><small>This message was intended for: {{ user.email }}</small></p>
+
+
+
+

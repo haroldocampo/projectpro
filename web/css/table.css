@@ -1,0 +1,30 @@
+table {
+    table-layout: fixed
+}
+
+td,
+th {
+    overflow: hidden;
+    white-space: nowrap
+}
+
+th {
+    width: auto !important;
+}
+
+.filter-section>.filter-section-bar>.form-group {
+    padding: 2px;
+}
+
+.form-inline .form-control {
+    font-size: 0.75em;
+}
+
+@media screen and (min-width: 1025px) {
+    .filter-section>.filter-section-bar>.form-group {
+        padding: 5px;
+    }
+    .form-inline .form-control {
+        font-size: 1em;
+    }
+}

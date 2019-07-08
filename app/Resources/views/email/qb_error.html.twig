@@ -1,0 +1,7 @@
+<p>Hello {{ name }},</p>
+
+{% if isSuccessful %}
+<p>Congratulations! All purchases imported from ProjectPro to Quickbooks successfully.</p>
+{% else %}
+<p>Import to QuickBooks was unsuccessful. See attached report for instructions to repair settings in QB or ProjectPro. After making repairs, try your import again.</p>
+{% endif %}

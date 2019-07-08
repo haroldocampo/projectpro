@@ -1,0 +1,277 @@
+
+{% extends 'base.html.twig' %}
+{% block pageheader %}Users{% endblock %}
+{% block body %}
+    <style>
+        .empty.ui-select-match + .select2-search-field,
+        .empty.ui-select-match + .select2-search-field input{
+            width: 100% !important;
+        }
+        .ui-select-search {
+            min-width: 200px;
+        }
+        .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
+            background: #3f51b5;
+            color: #FFF;
+        }
+        .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+            color: #FFF;
+            top: 2px;
+            position: relative;
+            left: 7px;
+        }
+    </style>
+    {% if employeeId is defined %}
+            <input type="hidden" name="employeeId" id="employeeId" value="{{ employeeId }}" />
+        {% endif %}
+    {#<div class="setup-wizard-container resizable {% if is_granted('ROLE_ADMIN') or employeeRecord.isDoneWizard and employeeRecord.hasRole('ROLE_ADMIN') %}hide{% endif %}">#}
+    {% if not is_granted('ROLE_ADMIN') and not employeeRecord.isDoneWizard and employeeRecord.hasRole('ROLE_ADMIN') %}
+    <div class="setup-wizard-container resizable">
+        <div class="setup-wizard-header">
+            <h4>SET UP WIZARD: STEP 1</h4>
+            <div class="dialog-close" onclick="closeWizard()">x</div>
+        </div>
+        <div class="setup-wizard-content" style="">
+            <h5 style="text-align: center;">MANAGE USERS</h5>
+            <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">All users entered in ProjectPro can submit purchases via ProjEx, the mobile application. To add permissions to a user that gives them access to ProjectPro, the web application, check Approver, Accountant, and/or Administrator in their profile. Approvers can edit and approve purchases submitted via Projex, the mobile application. Accountants can reconcile purchases with credit card statements and export data for use in their Accounting software. Administrators can add &amp; manage users, add &amp; remove payment types, &amp; add, delete and manage jobs. Each user will be emailed a link to set a password as soon as they are added. If a user forgets their password, please direct them to the login screen and have them click forgot password. They will receive an email with instructions as to how to reset their password.</span></span></p>
+            <ol>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click ADD USER</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Enter User&#39;s First Name, Last Name, &amp; Email</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Check Approver, Accountant, and/or Admin</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click ADD</span></span></li>
+            </ol>    
+        </div>
+        <div class="setup-wizard-footer">
+            <button class="btn btn-secondary" onclick="closeSetUpWizard();">Quit Set-Up Wizard</button>
+            <a href="{{ path('showCompanyAdminDashboard', {'id': companyId}) }}">
+                <button class="btn btn-primary">Step 2 <i class="fa fa-caret-right fa-fw"></i></button>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    <div class="setup-wizard-container hide page-help resizable">
+        <div class="setup-wizard-header">
+            <h4>HELP</h4>
+            <div class="dialog-close" onclick="closeHelp()">x</div>
+        </div>
+        <div class="setup-wizard-content" >
+            <h5 style="text-align: center;">MANAGE USERS</h5>
+            <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">All users entered in ProjectPro can submit purchases via ProjEx, the mobile application. To add permissions to a user that gives them access to ProjectPro, the web application, check Approver, Accountant, and/or Administrator in their profile. Approvers can edit and approve purchases submitted via Projex, the mobile application. Accountants can reconcile purchases with credit card statements and export data for use in their Accounting software. Administrators can add &amp; manage users, add &amp; remove payment types, &amp; add, delete and manage jobs. Each user will be emailed a link to set a password as soon as they are added. If a user forgets their password, please direct them to the login screen and have them click forgot password. They will receive an email with instructions as to how to reset their password.</span></span></p>
+            <ol>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click ADD USER</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Enter User&#39;s First Name, Last Name, &amp; Email</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Check Approver, Accountant, and/or Admin</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click ADD</span></span></li>
+            </ol>
+        </div>
+        <div class="setup-wizard-footer">
+            <button class="btn btn-secondary" onclick="closeHelp();">Close</button>
+        </div>
+    </div>
+    <div data-ng-controller="UserManagementController as ctrl">
+
+        <div class="row m-b-20">
+            <div class="col-xs-12">
+                <button class="btn btn-success" data-ng-click="initAddUser()">Add User</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card-box">
+
+
+                    <div class="p-20">
+                        <table class="table">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th>#</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Roles</th>
+                                    <th style="width: 70px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="u in users">
+                                    <th scope="row">{[$index + 1]}</th>
+                                    <td>{[u.user.first_name]}</td>
+                                    <td>{[u.user.last_name]}</td>
+                                    <td>{[u.user.email]}</td>
+                                    <td>
+                                        <span style="display: inline; margin-right: 5px;">
+                                            <i class="fa fa-check fa-fw" style="color: #315da6;"></i> 
+                                            <label>
+                                                PURCHASER
+                                            </label>
+                                        </span>
+                                        <span style="display: inline; margin-right: 5px;" data-ng-repeat="role in u.roles">
+                                            <i class="fa fa-check fa-fw" style="color: #315da6;"></i> 
+                                            <label for="role{[role.name]}">
+                                                {[ formatRoleText(role) ]}
+                                            </label>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <button type="button" class="btn btn-success dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false"></button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);" data-ng-click="initEditUser(u)">View/Edit</a>
+                                                <a class="dropdown-item" href="javascript:void(0);" data-ng-click="deleteUser(u.id)">Disable</a>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="edituserModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Edit User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">First Name</label>
+                                <input data-ng-model="targetUser.first_name" type="text" id="fos_user_registration_form_firstName" name="fos_user_registration_form[firstName]" required="required" maxlength="50" class="form-control" placeholder="First name">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Last Name</label>
+                                <input data-ng-model="targetUser.last_name" type="text" id="fos_user_registration_form_lastName" name="fos_user_registration_form[lastName]" required="required" maxlength="50" class="form-control" placeholder="Last name">
+                            </fieldset>
+                            <!--fieldset class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input data-ng-model="targetUser.email" type="email" id="fos_user_registration_form_email" name="fos_user_registration_form[email]" required="required" class="form-control" placeholder="Email address">
+                            </fieldset-->
+                            <div class="form-group row">
+                                <label class="col-sm-2">Type</label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox checkbox-primary" data-ng-repeat="role in listRoles">
+                                        <input id="role{[role.name]}" name="role{[role.name]}" data-ng-model="role.checked" data-ng-disabled="role.name == 'purchaser'" type="checkbox">
+                                        <label for="role{[role.name]}">
+                                            {[role.name]}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <fieldset class="form-group" style="height: 200px;">
+                                <label for="exampleInputEmail1">Payment Types <small>(Click box to select. Type to add new.)</small></label>
+                                <ui-select multiple on-remove="removed($item, $model)" on-select="ctrl.tagSelected ($item, $model)" tagging="ctrl.tagTransform" ng-model="ctrl.multipleDemo.selectedPeople" theme="bootstrap" style="width: 400px;" title="Choose a payment type">
+                                    <ui-select-match placeholder="Select payment type...">{[$item.name]}</ui-select-match>
+                                    <ui-select-choices repeat="p in ctrl.paymentTypes | propsFilter: {name: $select.search}">
+                                        <div ng-if="p.isTag" ng-bind-html="(p.name | highlight: $select.search) + ' (New Payment Type)'"></div>
+                                        <div ng-if="!p.isTag" ng-bind-html="(p.name | highlight: $select.search)"></div>
+                                    </ui-select-choices>
+                                </ui-select>                                
+                            </fieldset>
+
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" data-ng-click="editUser()" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="adduserModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Add User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="hidden" name="companyId" id="companyId" value="{{ companyId }}" />
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">First Name</label>
+                                <input data-ng-model="newUser.firstName" type="text" id="fos_user_registration_form_firstName" name="fos_user_registration_form[firstName]" required="required" maxlength="50" class="form-control" placeholder="First name">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Last Name</label>
+                                <input data-ng-model="newUser.lastName" type="text" id="fos_user_registration_form_lastName" name="fos_user_registration_form[lastName]" required="required" maxlength="50" class="form-control" placeholder="Last name">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input data-ng-model="newUser.email" type="email" id="fos_user_registration_form_email" name="fos_user_registration_form[email]" required="required" class="form-control" placeholder="Email address">
+                            </fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Type</label>
+                                <div class="col-sm-10">
+                                    <div class="checkbox checkbox-primary" data-ng-repeat="role in listRoles">
+                                        <input id="role{[role.name]}" name="role{[role.name]}" data-ng-disabled="role.name == 'purchaser'" data-ng-model="role.checked" type="checkbox">
+                                        <label for="role{[role.name]}">
+                                            {[role.name]}
+                                        </label>
+                                    </div>
+                                    <!--<div class="radio">
+                                        <input type="radio" name="userType" data-ng-model="newUser.userType" id="radio1" value="Approver" checked="">
+                                        <label for="radio1">
+                                            Approver
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <input type="radio" name="userType" data-ng-model="newUser.userType" id="radio2" value="Accountant">
+                                        <label for="radio2">
+                                            Accountant
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <input type="radio" name="userType" data-ng-model="newUser.userType" id="radio3" value="Admin">
+                                        <label for="radio3">
+                                            Admin
+                                        </label>
+                                    </div>
+                                    -->
+
+                                </div>
+                            </div>
+
+                            <fieldset class="form-group" style="height: 200px;">
+                                <label for="exampleInputEmail1">Payment Types <small>(Click box to select. Type to add new.)</small></label>
+                                <ui-select multiple tagging="ctrl.tagTransform" ng-model="ctrl.multipleDemo.selectedPeople" theme="bootstrap" style="width: 400px;" title="Choose a payment type">
+                                    <ui-select-match placeholder="Select payment type...">{[$item.name]}</ui-select-match>
+                                    <ui-select-choices repeat="p in ctrl.paymentTypes | propsFilter: {name: $select.search}">
+                                        <div ng-if="p.isTag" ng-bind-html="(p.name | highlight: $select.search) + ' (New Payment Type)'"></div>
+                                        <div ng-if="!p.isTag" ng-bind-html="(p.name | highlight: $select.search)"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </fieldset>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" data-ng-click="addUser()" class="btn btn-primary">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

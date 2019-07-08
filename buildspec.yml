@@ -1,0 +1,17 @@
+version: 0.2
+# env:
+  # variables: 
+    # SYMFONY_ENV : "prod"
+phases:
+  # install:
+  #   commands:
+  #     - apt-get update && apt-get install -y git
+
+  build:
+    commands:
+      - composer install --no-interaction --prefer-dist      
+      - vendor/bin/phpunit       
+
+artifacts:
+  files:
+    - '**/*'

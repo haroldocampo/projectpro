@@ -1,0 +1,14 @@
+app_web:
+    resource: '@AppBundle/Controller/Web'
+    type: annotation
+    schemes:  ['%httpProtocol%']
+
+app_api:
+    resource: '@AppBundle/Controller/Api'
+    type: annotation
+    schemes:  ['%httpProtocol%']
+
+
+# FOSUserBundle Routing
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

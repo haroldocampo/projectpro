@@ -1,0 +1,72 @@
+
+{% extends 'base.html.twig' %}
+{% block pageheader %}Classes{% endblock %}
+{% block body %}
+    <div class="setup-wizard-container hide page-help resizable">
+        <div class="setup-wizard-header">
+            <h4>HELP</h4>
+            <div class="dialog-close" onclick="closeHelp()">x</div>
+        </div>
+        <div class="setup-wizard-content"  style="white-space: pre-line;">
+            <h5 style="text-align: center;">CLASSES</h5>
+            ...
+        </div>
+        <div class="setup-wizard-footer">
+            <button class="btn btn-secondary" onclick="closeHelp();">Close</button>
+        </div>
+    </div>
+    <div data-ng-controller="ClassController">
+        <input type="hidden" name="companyId" id="companyId" value="{{ companyId }}" />
+        <div class="row m-b-20">
+            <div class="col-xs-6 col-xs-offset-3">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="text" style="width: 200px;" key-enter="addPurchaseClass()" class="form-control" data-ng-model="newClass.name" placeholder="Type Class Here">
+                    </div>
+                    <button class="btn btn-success" data-ng-click="addPurchaseClass()">Add Class</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-xs-offset-3">
+                <div class="card-box">
+
+                    <!-- Change color of red to grey -->
+                    <div class="p-20">
+                        <table class="table">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th>Class</th>
+                                    <th style="width: 70px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="c in classes">
+                                    <td>{[c.item.name]}</td>
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <a href="javascript:void(0);" data-ng-class="{'lighter-grey': c.cannotDelete}" data-ng-click="deleteClass(c, c.cannotDelete)"><i class="fa fa-trash" style="color: #717171;font-size: 25px;"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

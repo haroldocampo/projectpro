@@ -1,0 +1,103 @@
+
+{% extends 'base.html.twig' %}
+{% block pageheader %}Payment Types{% endblock %}
+{% block body %}
+    <!--div class="setup-wizard-container resizable {% if app.user.isDoneWizard and employeeRecord.hasRole('ROLE_ADMIN') %}hide{% endif %}">
+        <div class="setup-wizard-header">
+            <h4>SET UP WIZARD: STEP 1</h4>
+        </div>
+        <div class="setup-wizard-content">
+            <h5 style="text-align: center;">ENTER PAYMENT TYPES</h5>
+            Enter methods of payment that you would like your team to use in the field when submitting purchases. For security purposes we recommend that you
+            only enter the last 4 digits of a Credit Card Number. ex: Amex1234.
+
+            1. Type the payment type as you wish it to appear
+            2. Click ADD
+            3. Repeat until all payment types are entered
+            4. Click Step 2
+        </div>
+        <div class="setup-wizard-footer">
+            <button class="btn btn-secondary" onclick="closeSetUpWizard();">Close Set-Up Wizard</button>
+            <a href="{{ path('dashboardAdminUsersPage') }}">
+                <button class="btn btn-primary">Step 2 <i class="fa fa-caret-right fa-fw"></i></button>
+            </a>
+        </div>
+    </div-->
+    <div class="setup-wizard-container hide page-help resizable">
+        <div class="setup-wizard-header">
+            <h4>HELP</h4>
+            <div class="dialog-close" onclick="closeHelp()">x</div>
+        </div>
+        <div class="setup-wizard-content"  style="white-space: pre-line;">
+            <h5 style="text-align: center;">REMOVE PAYMENT TYPES</h5>
+            Remove payment types from all users by clicking the trash can icon next to obsolete payment type. Users will no longer be able to select removed payment types when submitting purchases. 
+        </div>
+        <div class="setup-wizard-footer">
+            <button class="btn btn-secondary" onclick="closeHelp();">Close</button>
+        </div>
+    </div>
+    <div data-ng-controller="PaymentTypeController">
+        <input type="hidden" name="companyId" id="companyId" value="{{ companyId }}" />
+        {#<div class="row m-b-20">
+            <div class="col-xs-7">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="text" style="width: 200px;" class="form-control" data-ng-model="newPaymentType.name" placeholder="Type Payment Type Here">
+                    </div>
+                    <button class="btn btn-success" data-ng-click="addPaymentType()">Add Payment Type</button>
+                </div>
+
+            </div>
+        </div>#}
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="card-box">
+
+                    <!-- Change color of red to grey -->
+                    <div class="p-20">
+                        <table class="table">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Payment Type</th>
+                                    {% if isQbIntegrated %}
+                                    <th>QB Transaction Type</th>
+                                    {% endif %}
+                                    <th style="width: 70px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="p in paymentTypes">
+                                    <th scope="row">{[$index + 1]}</th>
+                                    <td>{[p.item.name]}</td>
+                                    {% if isQbIntegrated %}
+                                    <td>
+                                        <select data-ng-change="associateTransactionType(p.item.id ,p.item.transaction_type.id)" data-ng-model="p.item.transaction_type.id" data-ng-init="p.item.transaction_type.id = (p.item.transaction_type.id ? p.item.transaction_type.id : 1)" data-ng-options="t.id as t.name for t in transactionTypes"></select>
+                                    </td>
+                                    {% endif %}
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <a href="javascript:void(0);" data-ng-class="{'lighter-grey': p.cannotDelete}" data-ng-click="deletePaymentType(p.item, p.cannotDelete)"><i class="fa fa-trash" style="color: #717171;font-size: 25px;"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

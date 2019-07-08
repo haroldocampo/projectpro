@@ -1,0 +1,804 @@
+{% extends 'base.html.twig' %}
+{% block pageheader %}Jobs{% endblock %}
+{% block body %}
+    {% if not is_granted('ROLE_ADMIN') and not employeeRecord.isDoneWizard and employeeRecord.hasRole('ROLE_ADMIN') %}
+        <div class="setup-wizard-container resizable">
+            <div class="setup-wizard-header">
+                <h4>SET UP WIZARD: STEP 2</h4>
+                <div class="dialog-close" onclick="closeWizard()">x</div>
+            </div>
+            <div class="setup-wizard-content">
+                <h5 style="text-align: center;">MANAGE JOBS</h5>
+                <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong><u>ADD A NEW JOB</u></strong></span></span></p>
+
+                <ol>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Create the job</span></span>
+
+                        <ol style="list-style-type:lower-alpha">
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Add job</strong>.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Type Job Name &amp; Job Number in appropriate fields.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Select the Approver</span></span>
+                                <ol style="list-style-type:lower-roman">
+                                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">If you don&rsquo;t see the approver in the drop down selections, select Not Listed <strong>(Create New Approver) </strong>and enter their first name, last name, &amp; email address.</span></span></li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Import Budget Data &ndash; If you would like to type in your cost items rather than import, skip to step 4. </span></span>
+                        <ol style="list-style-type:lower-alpha">
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">After steps 1, 2, &amp; 3 are completed, <strong>Download Budget Template</strong> button will appear. <strong>Click Download Budget Template.</strong></span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Add Job</strong>.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Open the downloaded Budget Template</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Paste data into the correct columns of the budget template: Item Numbers, Expense Types, Item Description, &amp; Budget Amount. The completed template will be imported back into ProjectPro. Using the template ensures that data is placed appropriately and submitting purchases will work correctly. Importing any other file will result in an error.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Save the completed budget template to your hard drive in a location that you can easily find for the next steps.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Upload Budget Data.</strong></span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Choose File</strong> and locate the template that you prepared in step 4d</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Upload Excel</strong>.</span></span></li>
+                        </ol>
+                    </li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Select Cost Items to allow for Field Purchases &ndash; By default, all cost items in the job will be available for employees to assign field purchases to. Most likely, there will be cost items you would like to disallow for this purpose.&nbsp; </span></span>
+                        <ol style="list-style-type:lower-alpha">
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Uncheck an item to make it unavailable to assign field purchases to on the mobile app, ProjEx.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">ProjectPro will ask you if you would like to disallow all items on this job with the same expense type that you just selected. Answer <strong>Yes</strong> or <strong>No</strong>.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">If you selected <strong>Yes</strong>, ProjectPro will ask you if you would like to disallow all items with the same expense type on all jobs. Selecting <strong>Yes</strong> here will set a default for all jobs (currently entered and those added in the future)</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">You can change your mind at any time and allow an individual Item, all Items with the same expense type on the job, or change the default for all jobs back to allow for that expense type by adding a check to the appropriate box and completing the same procedure you did in step 5c.</span></span></li>
+                        </ol>
+                    </li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Skip uploading a file and type in your cost items</span></span>
+                        <ol style="list-style-type:lower-alpha">
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Add Job</strong>. </span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Type in Item Number, Expense Type, Description, &amp; Budget Amount.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Add</strong>.</span></span></li>
+                            <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Repeat steps 4b &amp; 4c until all cost items are entere</span></span></li>
+                        </ol>
+                    </li>
+                </ol>
+
+                <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong><u>EDIT JOB NAME, NUMBER, APPROVER, OR COST ITEMS</u></strong></span></span></p>
+
+                <ol>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Select View/Edit</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Update appropriate field</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Add Items</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Allow or disallow Items for field purchases</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Delete a Item by clicking the trash can next to it</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Update</strong>.</span></span></li>
+                </ol>
+
+                <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong><u>IMPORT BUDGET</u></strong></span></span></p>
+
+                <ol>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong>Download Budget Template </strong></span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Perform steps 2c, 2d, &amp; 2d under <strong><u>ADD A NEW JOB</u></strong> above</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong>Upload Budget Data</strong></span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong>View/Edit</strong></span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Perform step 3 under <strong><u>ADD A NEW JOB </u></strong>above.</span></span></li>
+                </ol>
+
+                <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong><u>DELETE A JOB</u></strong> &ndash; This will make it unavailable on the mobile app, ProjEx to assign field purchases to.</span></span></p>
+
+                <ol>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                    <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong>Delete</strong></span></span></li>
+                </ol>
+            </div>
+            <div class="setup-wizard-footer">
+                <a href="{{ path('dashboardAdminUsersPage') }}">
+                    <button class="btn btn-secondary"><i class="fa fa-caret-left fa-fw"></i> Step 1</button>
+                </a>
+                <button class="btn btn-primary" style="margin-right: 0px;" onclick="closeSetUpWizard();">Finish Set-Up Wizard</button>
+            </div>
+        </div>
+    {% endif %}
+    <div class="setup-wizard-container hide page-help resizable">
+        <div class="setup-wizard-header">
+            <h4>HELP</h4>
+            <div class="dialog-close" onclick="closeHelp()">x</div>
+        </div>
+        <div class="setup-wizard-content" >
+            <h5 style="text-align: center;">MANAGE JOBS</h5>
+            <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong><u>ADD A NEW JOB</u></strong></span></span></p>
+
+            <ol>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Create the job</span></span>
+
+                    <ol style="list-style-type:lower-alpha">
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Add Job</strong>.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Type Job Name &amp; Job Number in appropriate fields.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Select the Approver</span></span>
+                            <ol style="list-style-type:lower-roman">
+                                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">If you don&rsquo;t see the approver in the drop down selections, select Not Listed <strong>(Create New Approver) </strong>and enter their first name, last name, &amp; email address.</span></span></li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Import Budget Data &ndash; If you would like to type in your cost items rather than import, skip to step 4. </span></span>
+                    <ol style="list-style-type:lower-alpha">
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">After steps 1, 2, &amp; 3 are completed, <strong>Download Budget Template</strong> button will appear. <strong>Click Download Budget Template.</strong></span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Add Job</strong>.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Open the downloaded Budget Template</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Paste data into the correct columns of the budget template: Item Numbers, Expense Types, Item Description, &amp; Budget Amount. The completed template will be imported back into ProjectPro. Using the template ensures that data is placed appropriately and submitting purchases will work correctly. Importing any other file will result in an error.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Save the completed budget template to your hard drive in a location that you can easily find for the next steps.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Upload Budget Data.</strong></span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Choose File</strong> and locate the template that you prepared in step 4d</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Upload Excel</strong>.</span></span></li>
+                    </ol>
+                </li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Select Cost Items to allow for Field Purchases &ndash; By default, all cost items in the job will be available for employees to assign field purchases to. Most likely, there will be cost items you would like to disallow for this purpose.&nbsp; </span></span>
+                    <ol style="list-style-type:lower-alpha">
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Uncheck an item to make it unavailable to assign field purchases to on the mobile app, ProjEx.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">ProjectPro will ask you if you would like to disallow all items on this job with the same expense type that you just selected. Answer <strong>Yes</strong> or <strong>No</strong>.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">If you selected <strong>Yes</strong>, ProjectPro will ask you if you would like to disallow all items with the same expense type on all jobs. Selecting <strong>Yes</strong> here will set a default for all jobs (currently entered and those added in the future)</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">You can change your mind at any time and allow an individual Item, all Items with the same expense type on the job, or change the default for all jobs back to allow for that expense type by adding a check to the appropriate box and completing the same procedure you did in step 5c.</span></span></li>
+                    </ol>
+                </li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Skip uploading a file and type in your cost items</span></span>
+                    <ol style="list-style-type:lower-alpha">
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Add Job</strong>. </span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Type in Item Number, Expense Type, Description, &amp; Budget Amount.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Add</strong>.</span></span></li>
+                        <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Repeat steps 4b &amp; 4c until all cost items are entere</span></span></li>
+                    </ol>
+                </li>
+            </ol>
+
+            <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong><u>EDIT JOB NAME, NUMBER, APPROVER, OR COST ITEMS</u></strong></span></span></p>
+
+            <ol>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Select View/Edit</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Update appropriate field</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Add Items</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Allow or disallow Items for field purchases</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Delete a Item by clicking the trash can next to it</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click <strong>Update</strong>.</span></span></li>
+            </ol>
+
+            <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong><u>IMPORT BUDGET</u></strong></span></span></p>
+
+            <ol>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong>Download Budget Template </strong></span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Perform steps 2c, 2d, &amp; 2d under <strong><u>ADD A NEW JOB</u></strong> above</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong>Upload Budget Data</strong></span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong>View/Edit</strong></span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Perform step 3 under <strong><u>ADD A NEW JOB </u></strong>above.</span></span></li>
+            </ol>
+
+            <p style="margin-left:0in; margin-right:0in"><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong><u>DELETE A JOB</u></strong> &ndash; This will make it unavailable on the mobile app, ProjEx to assign field purchases to.</span></span></p>
+
+            <ol>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif">Click the blue action drop down next to the job</span></span></li>
+                <li><span style="font-size:11pt"><span style="font-family:Calibri,sans-serif"><strong>Delete</strong></span></span></li>
+            </ol>
+
+        </div>
+        <div class="setup-wizard-footer">
+            <button class="btn btn-secondary" onclick="closeHelp();">Close</button>
+        </div>
+    </div>
+    <div data-ng-controller="ProjectsController">
+        <div class="row m-b-20">
+            <div class="col-xs-12">
+                <button class="btn btn-success" data-toggle="modal" data-target="#addProjectModal">Add Job</button>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card-box">
+                    <div class="p-20">
+                        <table class="table">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th></th>
+                                    <th>Job Number</th>
+                                    <th>Job Name</th>
+                                    <th>Assigned Approver</th>
+                                    <!--
+                                    <th>Payment Type</th>
+                                    <th>Date Approved</th>
+                                    <th>Date Exported</th>
+                                    -->
+                                    <th style="width: 70px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="p in projects">
+                                    <td></td>
+                                    <td>{[ p.number ]}</td>
+                                    <td>{[p.name]}</td>
+                                    <td>{[ p.approver.user.first_name ]} {[ p.approver.user.last_name ]}</td>
+                                    <!--
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    -->
+                                    <td style="width: 70px;">
+                                        <div class="btn-group pull-right">
+                                            <button type="button" class="btn btn-success btn-sm dropdown-toggle waves-effect waves-light"
+                                                    data-toggle="dropdown" aria-expanded="false"></button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);" data-ng-click="loadProject(p.id)" >View/Edit</a>
+                                                <a class="dropdown-item" href="/api/download/budgetTemplate?projectName={[p.name]}&projectNumber={[ p.number ]}&projectManager={[ p.approver.user.first_name ]}%20{[ p.approver.user.last_name ]}" >Download Budget Template</a>
+                                                <a class="dropdown-item" href="javascript:void(0);" data-ng-click="initBudgetUpload(p.id)" data-toggle="modal" data-target="#uploadBudgetDataModal">Upload Completed Budget Template</a>
+                                                <a class="dropdown-item" href="javascript:void(0);" data-ng-click="deleteProject(p.id)" >Delete</a>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="addProjectModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Add Job</h5>
+                        <button type="button" class="close" data-ng-click="closeAddModal()">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="alert alert-info" role="alert">
+                                <strong>STEP 1</strong> Enter basic job information.
+                            </div>
+                            <input type="hidden" name="companyId" id="companyId" value="{{ companyId }}" />                            
+                            <input type="hidden" name="isQbIntegrated" id="isQbIntegrated" value="{{ isQbIntegrated }}" />
+                            <fieldset class="form-group" data-ng-if="isQbIntegrated">
+                                <label for="">Customer:Job Name <i class="fa fa-info-circle fa-fw" title="Click to select or type a new Customer:Job for QB mapping purposes. To map to a customer but no job, enter Customer name only. To map to a job that is connected to a customer, use format Customer:Job"></i></label>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ui-select on-select="tagSelected($item)" select-on-blur ng-click="newProject.customer = null" tagging="tagTransform" ng-model="newProject.customer"
+                                            tagging-label="false" title="Choose a Customer Job" style="border: solid; border-color: #ccc; border-width:1px; border-radius: 0.25rem; padding-bottom:1px">
+                                            <ui-select-match placeholder="Select or Type Customer:Job">
+                                                <span ng-bind="newProject.customer"></span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="v in (customerJobs | filter:$select.search)" refresh="setSearch($select.search)" refresh-delay="0">
+                                                <div ng-bind-html="(v.name | highlight: $select.search)"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div class="col-md-2"> 
+                                        <span ng-if="targetPurchase.customerJob != null" class="fa fa-2x fa-times" ng-click="targetPurchase.customerJob = null; hasNewcustomerJob = false;" style="margin-top: 5%; cursor: pointer;"></span>
+                                        <span ng-if="targetPurchase.customerJob == null && customerJobName.length > 0" class="fa fa-2x fa-check" style="color:#d17a22;" ng-click="tagSelected($item)" style="margin-top: 5%; cursor: pointer;"></span>
+                                    </div>
+                                </div>                                
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Job Name *</label> <!--i style="color: red;" title="This field is required">*</i-->
+                                <input class="form-control" data-ng-class="{'border-red' : validName  == false}" data-ng-model="newProject.name" type="text" id="fos_user_registration_form_firstName" name="fos_user_registration_form[firstName]" required="required" maxlength="50" placeholder="Job Name (Required)">
+                                <span ng-show="validName  == false"><small style="color:red;">Please input a job name.</small></span>
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Job Number</label>
+                                <input data-ng-model="newProject.number" type="text" id="fos_user_registration_form_lastName" name="fos_user_registration_form[lastName]" required="required" maxlength="50" class="form-control" placeholder="Job Number (Optional)">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Assign Approver *</label>
+                                <select id="assignApprover" data-ng-class="{'border-red' : validApprover  == false}" class="form-control" data-ng-model="selectedApprover" data-ng-change='assignApprover(selectedApprover)'>
+                                    <option data-ng-repeat='a in approvers' value="{[ a.id ]}">{[ a.user.first_name ]} {[ a.user.last_name ]}</option>
+                                </select>  
+                                <span ng-show="validApprover == false"><small style="color:red;">Please assign an approver.</small></span>                          
+                            </fieldset>
+                            <fieldset class="form-group" data-ng-if="newProject.isNewApprover">
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-12">
+                                        <input placeholder="First Name" type="text" class="form-control" data-ng-model="newProject.approver.firstName"/>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12">
+                                        <input placeholder="Last Name" type="text" class="form-control" data-ng-model="newProject.approver.lastName"/>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12">
+                                        <input placeholder="Email" type="text" class="form-control" data-ng-model="newProject.approver.email"/>
+                                    </div>
+                                </div>                           
+                            </fieldset>
+                            <div class="alert alert-info" role="alert">
+                                <strong>STEP 2-5</strong><br/>2) Download the budget template. <span data-ng-show="newProject.name.length && selectedApprover != undefined"> <br/><br/>
+                                    <a data-ng-show="newProject.name.length && selectedApprover != undefined" data-ng-href="/api/download/budgetTemplate?projectName={[newProject.name]}&projectNumber={[newProject.number]}%20&projectManager={[ newProject.isNewApprover ? newProject.approver.firstName + ' ' + newProject.approver.lastName : tmpApprover]}" data-ng-click="showNextStepsHelp()" >
+                                        <button class="btn btn-success" type="button"><i class='zmdi zmdi-download zmdi-hc-fw'></i>  Download Budget Template</button>
+                                    </a>
+                                    <br/>
+                                    <br/></span><br/>3) Click 'Add Job' below. <br/>4) Open the downloaded file & follow the instructions to enter budget data into the template. <br/>5) When you are ready, return to this screen or <b>Select Actions > Upload Completed Budget Template</b> to import your completed budget template.'
+                            </div>
+                            <!--div data-ng-show="newProject.name.length && newProject.number.length && selectedApprover != undefined">
+                                <div class="alert alert-info" role="alert">
+                                    Download the budget template. This will then be uploaded again after you edit and fill up this file.
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 text-center">
+                                        <a data-ng-href="/api/download/budgetTemplate?projectName={[newProject.name]}&projectNumber={[newProject.number]}&projectManager={[ newProject.isNewApprover ? newProject.approver.firstName + ' ' + newProject.approver.lastName : tmpApprover]}" data-ng-click="showNextStepsHelp()" >
+                                            <button class="btn btn-success" type="button"><i class='zmdi zmdi-download zmdi-hc-fw'></i>  Download Budget Template</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div-->
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-ng-click="closeAddModal()">Close</button>
+                        <button type="button" data-ng-click="addProject()" class="btn btn-primary">Add Job</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="targetProjectModal">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">{[ targetProject.name ]} - {[ targetProject.number ]}</h5>
+                        <button type="button" class="close" data-ng-click="closeTargetProjectModal()" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <fieldset class="form-group" data-ng-if="isQbIntegrated">
+                            <label for="">QB Customer:Job Name <i class="fa fa-info-circle fa-fw" title="Click to select or type a new Customer:Job for QB mapping purposes. To map to a customer but no job, enter Customer name only. To map to a job that is connected to a customer, use format Customer:Job"></i></label>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ui-select on-select="tagSelected($item)" select-on-blur ng-click="targetProject.customerJob = null" tagging="tagTransform" ng-model="targetProject.customerJob"
+                                        tagging-label="false" title="Choose a Customer Job" style="border: solid; border-color: #ccc; border-width:1px; border-radius: 0.25rem; padding-bottom:1px">
+                                        <ui-select-match placeholder="Select or Type Customer:Job">
+                                            <span ng-bind="targetProject.customerJob"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="v in (customerJobs | filter:$select.search)" refresh="setSearch($select.search)" refresh-delay="0">
+                                            <div ng-bind-html="(v.name | highlight: $select.search)"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-md-2"> 
+                                    <span ng-if="targetPurchase.customerJob != null" class="fa fa-2x fa-times" ng-click="targetPurchase.customerJob = null; hasNewcustomerJob = false;" style="margin-top: 5%; cursor: pointer;"></span>
+                                    <span ng-if="targetPurchase.customerJob == null && customerJobName.length > 0" class="fa fa-2x fa-check" style="color:#d17a22;" ng-click="tagSelected($item)" style="margin-top: 5%; cursor: pointer;"></span>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="">Job Name *</label>
+                            <input data-ng-model="targetProject.name" type="text" class="form-control" placeholder="Your desired job name">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="">Job Number</label>
+                            <input data-ng-model="targetProject.number" type="text" class="form-control" placeholder="Your desired job number">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="">Job Manager</label>
+                            <select class="form-control" data-ng-model="targetProject.approver" data-ng-change='assignApproverUpdate(targetProject.approver)' data-ng-options="a.id as (a.user.first_name + ' ' + a.user.last_name) for a in approvers">
+                                <!--option data-ng-repeat='a in approvers' value="{[ a.id ]}">{[ a.user.first_name ]} {[ a.user.last_name ]}</option-->
+                            </select>
+                        </fieldset>
+                        <fieldset class="form-group" data-ng-if="targetProject.isNewApprover">
+                            <div class="row">
+                                <div class="col-md-4 col-xs-12">
+                                    <input placeholder="Approver First Name" type="text" class="form-control" data-ng-model="targetProject.approver.firstName"/>
+                                </div>
+                                <div class="col-md-4 col-xs-12">
+                                    <input placeholder="Approver Last Name" type="text" class="form-control" data-ng-model="targetProject.approver.lastName"/>
+                                </div>
+                                <div class="col-md-4 col-xs-12">
+                                    <input placeholder="Approver Email" type="text" class="form-control" data-ng-model="targetProject.approver.email"/>
+                                </div>
+                            </div>                           
+                        </fieldset>
+                        <button class="btn btn-primary text-center m-b-10" data-ng-click="initBudgetUpload(targetProject.id)" data-toggle="modal" data-dismiss="modal" data-target="#uploadBudgetDataModal">Upload Completed Budget Template</button>
+                        <div class="p-20" data-ng-if="!targetProject.costs.length" style="overflow: auto; height: 170px;">
+                            <table class="table">
+                                <thead class="thead-default">
+                                    <tr>
+                                        <th style="width: 110px">Item/Acct</th>
+                                        <th style="width: 100px">Expense Type</th>
+                                        <th>Description</th>
+                                        <th style="width: 100px">Budget Amount</th>
+                                        <th style="width: 70px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input placeholder="Item Number" type="text" data-key-enter="addNewCostAdhoc()" class="form-control" data-ng-model="newCost.codeNumber" /></th>
+                                        <td><input placeholder="Expense Type" type="text" data-key-enter="addNewCostAdhoc()" class="form-control" data-ng-model="newCost.expenseType" /></td>
+                                        <td><input placeholder="Description" type="text" data-key-enter="addNewCostAdhoc()" class="form-control" data-ng-model="newCost.description" /></td>
+                                        <td><input placeholder="Amount" type="text" data-key-enter="addNewCostAdhoc()" class="form-control" data-ng-model="newCost.budgetAmount" /></td>
+                                        <td style="width: 70px;">
+                                            <div class="btn-group pull-right">
+                                                <button class="btn btn-success btn-sm" data-ng-click="addNewCostAdhoc()">Add</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="alert alert-info" role="alert">
+                            <strong>STEP 6</strong> Select cost items to allow for purchase assignments. <button class="btn btn-info pull-right" style="margin-top: -5px;" data-toggle="modal" data-target="#purchaseInstructionsModal">Help?</button>
+                        </div>
+                        <div class="p-20" data-ng-if="targetProject.costs.length">
+                            <table class="table">
+                                <thead class="thead-default">
+                                    <tr>
+                                        <th>Allowed</th>
+                                        <th style="width: 90px">Item/Acct</th>
+                                        <th style="width: 110px">Type</th>
+                                        <th>Name</th>
+                                        {% if isQbIntegrated %}
+                                        <th><div>Cost Item</div><div><input type="radio" name="allGroup" data-ng-model="isAllToCost" data-ng-click="allToCostItem()"/></div></th>                                        
+                                        <th><div>Expense</div><div><input type="radio" name="allGroup" data-ng-model="isAllToExpense" data-ng-click="allToExpense()"/></div></th>
+                                        {% endif %}
+                                        <th style="width: 90px">Budget</th>
+                                        <th style="width: 90px"><div style="position: relative;">Notifications <a href="javascript:void(0);" onclick="alert('Turning notifications on will alert project managers if a submitted purchase causes the total spent to exceed the budget.');" style="position: absolute;top: 0;right: -21px;"><i style="color: #d17a22;" class="fa fa-question-circle fa-fw"></i></a></div><div class="text-center"><input type="checkbox" data-ng-model="isAllToNotify" data-ng-click="allToNotify()"/></div></th>
+                                        <th style="width: 70px;" class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="c in targetProject.costs | orderBy:'code_number'" data-ng-if="!c.hidden" data-ng-init="c.cost_class = (!c.cost_class ? 'ITEM' : c.cost_class)">
+                                        <td><input type="checkbox" data-ng-model="c.enabled" data-ng-change="initToggleCostItems(c)"/></td>
+                                        <td>
+                                            <span data-ng-show="!c.isEditing">{[ c.code_number ]}</span>
+                                            <input data-ng-show="c.isEditing" type="text" class="form-control" data-ng-model="c.code_number">
+                                        </td>
+                                        <td>
+                                            <span data-ng-show="!c.isEditing">{[ c.expense_type ]}</span>
+                                            <input data-ng-show="c.isEditing" type="text" class="form-control" style="padding: 0.375rem 0;" data-ng-model="c.expense_type">
+                                        </td>
+                                        <td>
+                                            <span data-ng-show="!c.isEditing">{[ c.description ]}</span>
+                                            <input data-ng-show="c.isEditing" type="text" class="form-control" data-ng-model="c.description">
+                                        </td>
+                                        {% if isQbIntegrated %}
+                                        <td>                                            
+                                            <input data-ng-model="c.cost_class" data-ng-if="c.enabled" type="radio" name="{[c.id]}" value="ITEM">                                            
+                                        </td>
+                                        <td>                                            
+                                            <input data-ng-model="c.cost_class" data-ng-if="c.enabled" type="radio" name="{[c.id]}" value="EXPENSE">                                            
+                                        </td>
+                                        {% endif %}
+                                        <td>
+                                            <span data-ng-show="!c.isEditing">{[ c.budget_amount ]}</span>
+                                            <input data-ng-show="c.isEditing" type="text" class="form-control" data-ng-model="c.budget_amount">
+                                        </td>
+                                        <td class="text-center">                                            
+                                            <input data-ng-model="c.notify" data-ng-if="c.enabled" type="checkbox">                                            
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div class="btn-group pull-right" data-ng-show="!c.isEditing">
+                                                <a data-ng-click="c.isEditing = true"><i class="fa fa-edit" style="cursor: pointer; color: #717171;font-size: 18px; margin-right: 8px;"></i></a>
+                                                <a data-ng-click="deleteCost(c.id)"><i class="fa fa-trash" style="cursor: pointer; color: #717171;font-size: 17px;"></i></a>
+                                            </div>
+                                            <div class="btn-group pull-right" data-ng-show="c.isEditing">
+                                                <button class="btn btn-success" data-ng-click="saveCostCode(c)">SAVE</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!--tr>
+                                        <td></td>
+                                        <td><input type="text" class="form-control" data-ng-model="newCost.codeNumber" /></th>
+                                        <td><input type="text" class="form-control" data-ng-model="newCost.expenseType" /></td>
+                                        <td><input type="text" class="form-control" data-ng-model="newCost.description" /></td>
+                                        <td><input type="text" class="form-control" data-ng-model="newCost.budgetAmount" /></td>
+                                        <td style="width: 70px;">
+                                            <div class="btn-group pull-right">
+                                                <button class="btn btn-success btn-sm" data-ng-click="addNewCost()">Add</button>
+                                            </div>
+                                        </td>
+                                    </tr-->
+                                </tbody>
+                            </table>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td><input placeholder="Item/Acct" type="text" data-key-enter="addNewCostAdhoc()" class="form-control" data-ng-model="newCost.codeNumber" /></th>
+                                        <td><input placeholder="Expense Type" type="text" data-key-enter="addNewCostAdhoc()" class="form-control" data-ng-model="newCost.expenseType" /></td>
+                                        <td><input placeholder="Description" type="text" data-key-enter="addNewCostAdhoc()" class="form-control" data-ng-model="newCost.description" /></td>
+                                        <td><input placeholder="Amount" type="text" data-key-enter="addNewCostAdhoc()" class="form-control" data-ng-model="newCost.budgetAmount" /></td>
+                                        <td style="width: 70px;">
+                                            <div class="btn-group pull-right">
+                                                <button class="btn btn-success btn-sm" data-ng-click="addNewCostAdhoc()">Add</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div data-ng-if="!targetProject.costs.length" class="text-center">
+                            <div class="alert alert-info" role="alert">
+                                <strong>No Budget Data Detected</strong> Upload Completed Budget Template to Add Items.
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-ng-click="closeTargetProjectModal()">Close</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="updateCurrentProject()">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="uploadBudgetDataModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Import Job Data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form id="uploadBudgetForm" action="{{ path('apiImportBudget') }}" method="POST" enctype="multipart/form-data">
+                        <div class="modal-body">
+
+                            <div class="alert alert-info" role="alert">
+                                <strong>Upload from Budget Template File</strong>
+                            </div>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Budget File:</label>
+                                <input  type="file" id="budgetFile" name="budgetFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required="required" maxlength="50" class="form-control">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input id="uploadProjectId" type="hidden" name="projectId" value="6">
+                            </fieldset>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Upload Excel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="afterDownloadHelpModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Next Steps</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="alert alert-info" role="alert">
+                                <strong>STEP 3</strong> Follow instructions found on the template to transfer data to columns.
+                            </div>
+                            <div class="m-t-20 m-b-20">
+                            </div>
+                            <div class="alert alert-info" role="alert">
+                                <strong>STEP 4</strong> Return to the Manage Jobs screen under settings in ProjectPro and import the completed template to the correct job.
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Got it!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="allowExpenseTypesModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Allow/Disallow Items</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="alert alert-info" role="alert">
+                                {[ targetCostItem.enabled ? 'Allow' : 'Disallow' ]} all Items with expense type {[targetCostItem.expense_type]} on this job?
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" data-ng-click="toggleCostParam.isAllExpenseTypes = true">Yes</button>
+                                <button type="button" class="btn btn-warning" data-ng-click="toggleCostItems(false)">No</button>
+                            </div>
+                            <div class="m-t-20">
+                            </div>
+                            <div data-ng-show="toggleCostParam.isAllExpenseTypes">
+                                <div class="alert alert-info" role="alert">
+                                    {[ targetCostItem.enabled ? 'Allow' : 'Disallow' ]} all Items with expense type {[targetCostItem.expense_type]} on ALL JOBS?
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary" data-ng-click="toggleCostItems(true)">Yes</button>
+                                    <button type="button" class="btn btn-warning" data-ng-click="toggleCostItems(false)">No</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" style="background: #ccc;" id="purchaseInstructionsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!-- show in front of all modals -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel2">Information</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>
+                            Uncheck a Item to make it unavailable for field purchases.
+                        </p>
+                        <label><input type="checkbox" data-ng-click="disableInstruction()" /> I dont want to see this message again</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Got it!</button>
+                    </div>
+
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
+
+        <div class="modal fade" style="background: #ccc;" id="congratulationsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!-- show in front of all modals -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel2">SET-UP WIZARD COMPLETE</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p style="font-size: 16px;text-align: center;">
+                            CONGRATULATIONS! You have completed setup and you are ready to start using ProjectPro.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+                    </div>
+
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->        
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /*******************************
+* MODAL AS LEFT/RIGHT SIDEBAR
+* Add "left" or "right" in modal parent div, after class="modal".
+* Get free snippets on bootpen.com
+*******************************/
+        #purchaseInstructionsModal .modal-dialog {
+            top: 120px;
+            width: 400px;
+            box-shadow: #ccc 10px 10px 10px;
+        }
+
+        .modal.left .modal-dialog,
+        .modal.right .modal-dialog {
+            position: fixed;
+            margin: auto;
+            width: 320px;
+            height: 100%;
+            -webkit-transform: translate3d(0%, 0, 0);
+            -ms-transform: translate3d(0%, 0, 0);
+            -o-transform: translate3d(0%, 0, 0);
+            transform: translate3d(0%, 0, 0);
+        }
+
+        .modal.left .modal-content,
+        .modal.right .modal-content {
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .modal.left .modal-body,
+        .modal.right .modal-body {
+            padding: 15px 15px 80px;
+        }
+
+        /*Left*/
+        .modal.left.fade .modal-dialog{
+            left: -320px;
+            -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+            -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+            -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+            transition: opacity 0.3s linear, left 0.3s ease-out;
+        }
+
+        .modal.left.fade.in .modal-dialog{
+            left: 0;
+        }
+
+        /*Right*/
+        .modal.right.fade .modal-dialog {
+            right: -320px;
+            -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+            -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+            -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+            transition: opacity 0.3s linear, right 0.3s ease-out;
+        }
+
+        .modal.right.fade.in .modal-dialog {
+            right: 0;
+        }
+
+        /* ----- MODAL STYLE ----- */
+        .modal-content {
+            border-radius: 0;
+            border: none;
+        }
+
+        .modal-header {
+            border-bottom-color: #EEEEEE;
+            background-color: #FAFAFA;
+        }
+
+        /* ----- v CAN BE DELETED v ----- */
+        body {
+            background-color: #78909C;
+        }
+
+        .demo {
+            padding-top: 60px;
+            padding-bottom: 110px;
+        }
+
+        .btn-demo {
+            margin: 15px;
+            padding: 10px 15px;
+            border-radius: 0;
+            font-size: 16px;
+            background-color: #FFFFFF;
+        }
+
+        .btn-demo:focus {
+            outline: 0;
+        }
+
+        .demo-footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            background-color: #212121;
+            text-align: center;
+        }
+
+        .demo-footer > a {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            color: #fff;
+        }
+
+
+        .modal-backdrop {
+            z-index: -1;
+        }
+
+        .border-red {
+            border-color: red !important;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

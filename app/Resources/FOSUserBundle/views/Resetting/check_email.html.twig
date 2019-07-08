@@ -1,0 +1,31 @@
+{% extends '@FOSUser/fos_base.html.twig' %}
+
+{% block content %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="wrapper">
+        <div class="container">
+
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                </div>
+            </div>
+            <div class="row m-t-20">
+                <div class="col-xs-12 col-lg-6 col-lg-offset-3">
+                    <div class="card-box">
+
+                        <h2 class="m-t-0 m-b-20">Check your inbox!</h2>
+                        <p>We sent you an email with the password reset link.</p>
+                        <a href="{{ path('fos_user_security_login') }}" class="btn btn-primary">Go back to log in</a>
+                    </div>
+                </div><!-- end col-->
+            </div>
+        </div> <!-- container -->
+
+
+
+    </div> <!-- End wrapper -->
+{% endblock %}
+

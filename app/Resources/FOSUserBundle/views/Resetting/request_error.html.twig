@@ -1,0 +1,48 @@
+{% extends '@FOSUser/fos_base.html.twig' %}
+
+{% block content %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="wrapper">
+        <div class="container">
+
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                </div>
+            </div>
+            <div class="row m-t-20">
+                <div class="col-xs-12 col-lg-6 col-lg-offset-3">
+                    <div class="card-box">
+
+                        <h2 class="m-t-0 m-b-20">Forgot Password</h2>
+                        <div class="alert alert-danger" role="alert">
+                            That email is not in our database
+                        </div>
+                        <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+                            <div class="form-group row">
+                                <label for="email" class="col-sm-2 form-control-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="email" id="email" name="username" required="required" placeholder="Email" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-10"></label>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-primary pull-right">Reset Password</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div><!-- end col-->
+            </div>
+
+        </div> <!-- container -->
+
+
+
+    </div> <!-- End wrapper -->
+{% endblock %}

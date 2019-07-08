@@ -1,0 +1,35 @@
+<h2 style="color: red;">NOTICE: Budget has been exceeded</h2>
+
+<p>{{ user }} has submitted a purchase in the amount of ${{ amount }} which has caused the total spent on the following cost item(s) to exceed the budget.</p>
+
+<br/>
+
+<table style="border:none;" cellspacing="0" cellpadding="0">
+<tr>
+    <td></td>
+    <td><b>BUDGET</b></td>
+    <td><b>OVERAGE</b></td>
+</tr>
+{% for c in costs %}
+    <tr>
+        <td>{{ c.description }}</td>
+        <td>${{ c.budget }}</td>
+        <td>${{ c.overage }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+<br>
+<p>Follow these steps to edit or decline this purchase:</p>
+
+<ol>
+<li>Log into ProjectPro</li>
+
+<li>Go to the Approver Dashboard</li>
+
+<li>Open project Fortress Storage</li>
+
+<li>Open the purchase submitted today in the amount of ${{ amount }}</li>
+
+<li>Proceed to edit, approve, or decline</li>
+</ol>

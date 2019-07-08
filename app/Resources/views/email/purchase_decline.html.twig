@@ -1,0 +1,14 @@
+<p>Hi {{ purchaserFirstName }}</p>
+
+<p>{{ declinerFirstName }} {{ declinerLastName }} has declined the purchase below:</p>
+
+<p>
+    <b>Submission Date: </b>{{ dateDeclined|date('m-d-Y') }}<br>
+    <b>Total Amount: </b>{{ amount }}<br>
+    <b>Description: </b><br/><br/>
+    {% for pi in purchaseItems %}
+        <b>${{ pi.amount }}</b> {{pi.cost.codeNumber}} {{pi.cost.description}}<br>
+    {% endfor %}
+    <br>
+    <b>Comments: </b>{{ comments }}<br>
+</p>

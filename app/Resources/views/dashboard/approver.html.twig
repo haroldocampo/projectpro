@@ -1,0 +1,763 @@
+{% extends 'base.html.twig' %} 
+{% block pageheader %}Approver Dashboard{% endblock %} 
+{% block body %}
+<style>
+    table {
+        table-layout: fixed
+    }
+
+    td {
+        overflow: hidden;
+        white-space: nowrap
+    }
+
+    th {
+        width: auto !important;
+    }
+
+    .empty.ui-select-match+.select2-search-field,
+    .empty.ui-select-match+.select2-search-field input {
+        width: 100% !important;
+    }
+
+    .ui-select-search {
+        min-width: 200px;
+    }
+
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
+        background: #3f51b5;
+        color: #FFF;
+    }
+
+    .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+        color: #FFF;
+        top: 2px;
+        position: relative;
+        left: 7px;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+</style>
+<div class="setup-wizard-container hide page-help resizable">
+    <div class="setup-wizard-header">
+        <h4>HELP</h4>
+        <div class="dialog-close" onclick="closeHelp()">x</div>
+    </div>
+    <div class="setup-wizard-content">
+        <h5 style="text-align: center;">APPROVER FUNCTIONS</h5>
+        <p style="margin-left:0in; margin-right:0in">
+            <span style="font-size:11pt">
+                <span style="font-family:Calibri,sans-serif">
+                    <strong>
+                        <u>STANDARD OPERATING PROCEDURE</u>
+                    </strong>
+                </span>
+            </span>
+        </p>
+
+        <p style="margin-left:0in; margin-right:0in">
+            <span style="font-size:11pt">
+                <span style="font-family:Calibri,sans-serif">All purchases are submitted via ProjEx, the mobile application. Approvers edit and approve all submitted
+                    expenses on a designated weekday. Accountants reconcile credit card statements with approved purchases
+                    and export data monthly. </span>
+            </span>
+        </p>
+
+        <p style="margin-left:0in; margin-right:0in">
+            <span style="font-size:11pt">
+                <span style="font-family:Calibri,sans-serif">
+                    <strong>
+                        <u>SEND REMINDERS TO FIELD EMPLOYEES</u>
+                    </strong>
+                </span>
+            </span>
+        </p>
+
+        <ul>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">To remind all field employees to submit purchases, click the reminder button (upper right)</span>
+                </span>
+
+                <ul style="list-style-type:circle">
+                    <li>
+                        <span style="font-size:11pt">
+                            <span style="font-family:Calibri,sans-serif">Send Reminder Now (Purchasers) - Clicking this will immediately send an email reminder to all
+                                field employees.</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span style="font-size:11pt">
+                            <span style="font-family:Calibri,sans-serif">Schedule Reminders (Purchasers) - Select a day or days to send an email reminder to all field
+                                employees. Notifications will be sent at 7am CST on selected days every week. To stop reminders,
+                                uncheck all days.</span>
+                        </span>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <p style="margin-left:0in; margin-right:0in">
+            <span style="font-size:11pt">
+                <span style="font-family:Calibri,sans-serif">
+                    <strong>
+                        <u>SELECT PURCHASES TO VIEW</u>
+                    </strong>
+                </span>
+            </span>
+        </p>
+
+        <ul>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Set Approval Status - By default, status is set to Not Approved and only those purchases that are awaiting
+                        approval will be shown. To view Approved purchases, click in the box and change setting to Approved
+                        or All.</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Set Approver Filter - By default, filter is set so you will only see jobs you are assigned to approve.
+                        To change this, click in the box to select a different approver or all approvers.</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Search for a Job - Begin typing job name or number in the search box and select job.</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">View List of Purchases that satisfy filters by clicking the blue bar of the desired job.</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Click the column title to sort by a field</span>
+                </span>
+            </li>
+        </ul>
+
+        <p style="margin-left:0in; margin-right:0in">
+            <span style="font-size:11pt">
+                <span style="font-family:Calibri,sans-serif">
+                    <strong>
+                        <u>VIEW, EDIT &amp; APPROVE A PURCHASE</u>
+                    </strong>
+                </span>
+            </span>
+        </p>
+
+        <ul>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">View Purchase Details &ndash; Click View next to desired purchase.</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Change Date of Purchase - Click in the box and select correct purchase date.</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Change Payment Type - Click in the box and select correct payment type. If desired payment type is not
+                        shown, ask an administrator to enter the payment type in the administration settings.</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Change total purchase amount &ndash; Click in the box and enter the correct amount (This should be the
+                        total amount shown on the receipt and will be used by ProjectPro to reconcile with credit card transactions.)</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Change Cost Codes - Click a cost code to select a different one. Click the trash can to delete a cost
+                        code. Click + to add another cost code.</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Redistribute money - Click in the box and change amount. NOTE: Sales tax was entered in the field and
+                        automatically prorated to each cost item. If you change an amount be sure to include sales tax if
+                        applicable.
+                    </span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">To save changes without approving &ndash; Click Update Only</span>
+                </span>
+            </li>
+            <li>
+                <span style="font-size:11pt">
+                    <span style="font-family:Calibri,sans-serif">Approve the purchase - Click Approve when you are finished editing or are satisfied the information is
+                        correct.
+                    </span>
+                </span>
+            </li>
+        </ul>
+
+    </div>
+    <div class="setup-wizard-footer">
+        <button class="btn btn-secondary" onclick="closeHelp();">Close</button>
+    </div>
+</div>
+<div data-ng-controller="ApproverDashboardController">
+    <div class="row">
+        <div class="col-xs-12 form-inline">
+            <div class="" style="padding: 0px!important;">
+                <div class="form-group">
+                    {#
+                    <label class="">Project</label>#}
+                    <input type="text" placeholder="Search Job" class="form-control" data-ng-model="projectFilter" />
+                    <i class="fa fa-search" style="left: -26px;position: relative;color: #ccc;"></i>
+                </div>
+                <div class="form-group p-20">
+                    {#
+                    <label class="">Status</label>#}
+                    <select class="form-control" data-ng-model="statusFilter" data-ng-change="changeStatusFilter()">
+                        <option value="ALL">ALL</option>
+                        <option value="STATUS_NOT_APPROVED">NOT APPROVED</option>
+                        <option value="STATUS_APPROVED">APPROVED</option>
+                        <option value="STATUS_DECLINED">DECLINED</option>
+                    </select>
+                </div>
+                <div class="form-group p-20">
+                    {#
+                    <label class="">Approver</label>#}
+                    <select class="form-control" data-ng-model="approverFilter" data-ng-options="(a.employee.user.first_name + ' ' + a.employee.user.last_name + ' (' + a.unapprovedCount + ')') for a in approvers">
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="companyId" id="companyId" value="{{ companyId }}" /> {% if employeeId is defined %}
+    <input type="hidden" name="employeeId" id="employeeId" value="{{ employeeId }}" /> {% endif %}
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="card-box">
+
+                <div data-ng-repeat="r in projects | filter:projectSearch" data-ng-init="r.active = (r.aactive == true)" data-ng-show="r.filtered.length">
+                    <h3 class="text-center project-header" data-ng-click="r.active = !r.active">{[r.project.name]} ({[ r.project.number ]}) - {[ r.project.approver.user.first_name ]} {[ r.project.approver.user.last_name
+                        ]}
+                        <span class="unapproved-bubble" data-ng-if="getUnapprovedFromProject(r.filtered) > 0">{[ getUnapprovedFromProject(r.filtered) ]}</span>
+                    </h3>
+                    <div class="p-20" data-ng-show="r.active == true">
+                        <table class="table purchase-table hover-grey">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th style="width: 150px;" data-ng-click="sortColumn('date_of_purchase')">Date of Purchase
+                                        <i data-ng-show="sortBy == 'date_of_purchase'" class="fa fa-fw" data-ng-class="{ 'fa-angle-down' : !reverse, 'fa-angle-up' : reverse}"></i>
+                                    </th>
+                                    <th style="width: 200px!important; text-align: center;" data-ng-click="sortColumn('total_amount')">Amount
+                                        <i data-ng-show="sortBy == 'total_amount'" class="fa fa-fw" data-ng-class="{ 'fa-angle-down' : !reverse, 'fa-angle-up' : reverse}"></i>
+                                    </th>
+                                    <th data-ng-click="sortColumn('payment_type.name')">Payment Type
+                                        <i data-ng-show="sortBy == 'payment_type.name'" class="fa fa-fw" data-ng-class="{ 'fa-angle-down' : !reverse, 'fa-angle-up' : reverse}"></i>
+                                    </th>
+                                    <th data-ng-click="sortColumn('purchaser.user.first_name')">Submitted By
+                                        <i data-ng-show="sortBy == 'purchaser.user.first_name'" class="fa fa-fw" data-ng-class="{ 'fa-angle-down' : !reverse, 'fa-angle-up' : reverse}"></i>
+                                    </th>
+                                    <th class="date-approved-col" style="width: 175px;" data-ng-click="sortColumn('date_approved')">Date Approved/
+                                        <span style="color: #d17a22;">Declined</span>
+                                        <i data-ng-show="sortBy == 'date_approved'" class="fa fa-fw" data-ng-class="{ 'fa-angle-down' : !reverse, 'fa-angle-up' : reverse}">
+                                    </th>
+                                    <th style="width: 150px;" data-ng-click="sortColumn('date_exported')">Date Exported
+                                        <i data-ng-show="sortBy == 'date_exported'" class="fa fa-fw" data-ng-class="{ 'fa-angle-down' : !reverse, 'fa-angle-up' : reverse}">
+                                    </th>
+                                    <th style="width: 70px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="p in r.filtered = (r.purchases | filter:search) | orderBy:sortBy:reverse">
+                                    <td data-ng-click="loadPurchaseStatic(p)" title="{[ p.date_of_purchase | date:'MM/dd/yy']}">{[ p.date_of_purchase | date:'MM/dd/yy']}</td>
+                                    <td data-ng-click="loadPurchaseStatic(p)" style="text-align: right; padding-right: 80px;" title="{[ p.total_amount | currency ]}">{[ p.total_amount | currency ]}</td>
+                                    <td data-ng-click="loadPurchaseStatic(p)" title="{[ p.payment_type.name ]}">{[ p.payment_type.name ]}</td>
+                                    <td data-ng-click="loadPurchaseStatic(p)" title="{[ p.purchaser.user.first_name ]} {[ p.purchaser.user.last_name ]}">{[ p.purchaser.user.first_name ]} {[ p.purchaser.user.last_name ]}</td>
+                                    <td data-ng-click="loadPurchaseStatic(p)">
+                                        <span title="{[ p.date_approved | date:'MM/dd/yy' ]}" data-ng-if="!p.date_declined">{[ p.date_approved | date:'MM/dd/yy' ]}</span>
+                                        <span style="color: #d17a22" title="{[ p.date_declined | date:'MM/dd/yy' ]}" data-ng-if="p.date_declined">{[ p.date_declined | date:'MM/dd/yy' ]}</span>
+                                    </td>
+                                    <td data-ng-click="loadPurchaseStatic(p)" title="{[ p.date_exported | date:'MM/dd/yy' ]}">{[ p.date_exported | date:'MM/dd/yy' ]}</td>
+                                    <td style="width: 70px;">
+                                        <button class="btn btn-sm btn-primary" data-ng-if="p.status == 'STATUS_NOT_APPROVED' && p.date_imported == null" data-ng-click="loadPurchase(p)">
+                                            View
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" data-ng-if="p.status == 'STATUS_NOT_APPROVED' && p.date_imported != null" data-ng-click="loadPurchaseStatic(p)">
+                                            View
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" data-ng-if="p.status == 'STATUS_APPROVED'" data-ng-click="loadPurchaseStatic(p)">
+                                            Approved
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary tertiary" data-ng-if="p.status == 'STATUS_DECLINED'" data-ng-click="loadPurchaseStatic(p)">
+                                            Declined
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="targetPurchaseModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mySmallModalLabel">Purchase Approval</h5>
+                    <button type="button" class="close" aria-label="Close" data-ng-click="closePurchaseModal()">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPurchaseForm" name="editPurchaseForm">
+                        <div class="row">
+                            <div class="col-md-6 drift-pane1">
+                                <fieldset class="form-group">
+                                    <label for="">Job</label>
+                                    <span> {[ targetPurchase.project.name ]} ({[ targetPurchase.project.number ]})</span>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="">Submitted By: </label>
+                                    <span> {[ targetPurchase.purchaser.user.first_name ]} {[ targetPurchase.purchaser.user.last_name
+                                        ]}
+                                    </span>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="">Date of Purchase</label>
+                                    <input type="text" class="form-control dpicker" required data-ng-model="targetPurchase.date_of_purchase" />
+                                </fieldset>
+                                {#<fieldset class="form-group">
+                                    <div class="col-xs-6">Import to QuickBooks</div>
+                                    <div class="col-xs-6">
+                                        <label class="switch">
+                                            <input type="checkbox" data-ng-model="qbImport" data-ng-change="setImport()">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </fieldset>#}
+                                <fieldset class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="approverVendor">Vendor
+                                                <small>(Click box to select. Type to add new.)</small>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="col-md-10">
+                                            <ui-select on-select="tagSelected($item)" ng-click="targetPurchase.vendor = null" tagging="tagTransform" ng-model="targetPurchase.vendor"
+                                                tagging-label="false" title="Choose a vendor" style="border: solid; border-color: #ccc; border-width:1px; border-radius: 0.25rem; padding-bottom:1px">
+                                                <ui-select-match placeholder="Select vendor...">
+                                                    <span ng-bind="targetPurchase.vendor.name"></span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="v in (vendors | filter:$select.search)" refresh="setSearch($select.search)" refresh-delay="0">
+                                                    <div ng-bind-html="(v.name | highlight: $select.search)"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            {# <span ng-if="targetPurchase.vendor != null" class="fa fa-2x fa-times" ng-click="targetPurchase.vendor = null; hasNewVendor = false;" style="margin-top: 5%; cursor: pointer;"></span> #}
+                                            <span ng-if="targetPurchase.vendor == null && vendorName.length > 0" class="fa fa-2x fa-check" style="color:#d17a22;" ng-click="tagSelected($item)" style="margin-top: 5%; cursor: pointer;"></span>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="">Payment Type</label>
+                                    <select class="form-control" data-ng-model="targetPurchase.payment_type.id" data-ng-options="pt.id as pt.name for pt in paymentTypes">
+                                    </select>
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="">Total Amount</label>
+                                    <input type="text" class="form-control" format="number" data-ng-change="activateSalesTaxOverride()" data-ng-model="targetPurchase.total_amount"
+                                    />
+                                </fieldset>
+
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <a class="text-center" style="text-align: center;">
+                                    <img class="receipt-image1" data-ng-src="{[ targetPurchase.image ]}" data-zoom="{[ targetPurchase.image ]}" style="height: 350px; margin: 0 auto;"
+                                        class="img-fluid">
+                                    <p style="color: #d17a22;">(Roll over image to zoom)</p>
+                                </a>
+                                {#
+                                <a class="text-center" data-ng-href="{{ vich_uploader_asset(targetPurchase, 'imageFile') }}" style="text-align: center;"
+                                    data-toggle="lightbox">#} {#
+                                    <img data-ng-src="{{ vich_uploader_asset(targetPurchase, 'imageFile') }}" style="height: 350px; margin: 0 auto;" class="img-fluid">#} {#
+                                    <p>(Click to Enlarge)</p>#} {#
+                                </a>#}
+                            </div>
+                            <div class="col-md-12">
+                                {# <div class="p-20" data-ng-if="targetPurchase.purchase_items.length"> #}
+                                <div class="p-20">
+                                    <table class="table approver-table">
+                                        <tbody>
+                                            <tr class="thead-default">
+                                                <td></td>
+                                                <td>Cost Code</td>
+                                                <td>Amount
+                                                    <small style="color: red;">inclusive of sales tax ({[ (isSalesTaxOverride ? 0 : targetPurchase.sales_tax)
+                                                        | currency ]}) {[isSalesTaxOverride ? '*' : '']}</small>
+                                                </td>
+                                            </tr>
+                                            <tr data-ng-repeat="pc in targetPurchase.purchase_items" data-ng-init="getSalesTaxCalculated(pc)">
+                                                <td style="text-align: center;">
+                                                    <table data-ng-init="getRemainingBudget(pc)" style="width: 100%;">
+                                                    <tbody style="width: 100%;">
+                                                        <tr>
+                                                            <td style="padding: 0; border: 0;">
+                                                                <div class="text-center bold">Budget</div>
+                                                                <div class="text-right">{[ pc.budgetAmount | currency ]}</div>
+                                                            </td>
+                                                            <td style="padding: 0; border: 0;">
+                                                                <div class="text-center bold">Approved</div>
+                                                                <div class="text-right">{[ pc.approvedAmount | currency ]}</div>
+                                                            </td>
+                                                            <!--td>
+                                                                <div class="text-center">Remaining</div>
+                                                                <div class="text-right">{[ pc.remainingAmount | currency ]}</div>
+                                                            </td-->
+                                                        </tr>
+                                                    </tbody>
+                                                    </table>
+                                                </td>
+                                                <td>
+                                                    <select data-ng-if="!pc.cost.hidden" class="form-control" data-ng-change="getRemainingBudget(pc)" data-ng-model="pc.cost.id" data-ng-options="c.id as (c.code_number + ' ' + c.description +'('+ c.expense_type +')') for c in costs"></select>
+                                                    <input data-ng-if="pc.cost.hidden" class="form-control" data-ng-model="pc.cost.description" />
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input data-ng-change="activateSalesTaxOverride()" required type="text" class="form-control" format="number" data-ng-model="pc.postAmount" style="width: 80%;display: inline-block;"/>
+                                                        <span data-ng-click="deletePurchaseItem(pc.id, pc)" style="width: 10%;display: inline-block;text-align: center;"><i class="fa fa-trash"></i></span>
+                                                    </div>
+                                                </td>
+                                                <td class="memo">
+                                                    <textarea class="form-control" placeholder="Memo" maxlength="100" row="3" data-ng-model="pc.memo"></textarea>
+                                                    <hr/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td style="text-align: right;">TOTAL:</td>
+                                                <td>{[ getTotalPostAmount(targetPurchase) | currency ]}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <button class="btn btn-success m-t-20" data-ng-click="addPurchaseItem()">+ ADD NEW</button>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <small>(new cost code)</small>
+                                                    </div>
+                                                    <select id="approverPurchaseItemCode" class="form-control" data-ng-model="newPurchaseItem.costId" data-ng-options="c.id as (c.code_number + ' ' + c.description +'('+ c.expense_type +')') for c in costs"
+                                                        data-ng-change="rememberSelectedPurchaseItem()"></select>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <small>(new cost amount)</small>
+                                                    </div>
+                                                    <div>
+                                                    <input id="approverPurchaseItemValue" type="text" class="form-control" format="number" data-ng-model="newPurchaseItem.amount"
+                                                        data-ng-change="rememberSelectedPurchaseItem()" />
+                                                        </div>
+                                                </td>
+                                                <td class="memo">
+                                                    <textarea class="form-control" placeholder="Memo" maxlength="100" row="3" data-ng-model="newPurchaseItem.memo"></textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="error" ng-show="editPurchaseForm.$invalid" style="color: red;">- Please fill in the required fields</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-ng-click="closePurchaseModal()">Close</button>
+                    <button type="button" class="btn btn-secondary" data-ng-disabled="editPurchaseForm.$invalid" data-ng-click="updatePurchase()">Update Only</button>
+                    <button type="button" data-ng-if="targetPurchase.status == 'STATUS_NOT_APPROVED'" class="btn btn-secondary tertiary" data-ng-click="declinePurchase()">Decline</button>
+                    <button type="button" class="btn btn-success" data-ng-disabled="editPurchaseForm.$invalid" data-ng-click="approvePurchase()">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="targetStaticPurchaseModal">
+        <div class="modal-dialog modal-lg" role="document" style="width: 70%;">
+            <div class="modal-content">
+                <div class="modal-header" style="{[ targetPurchase.status == 'STATUS_DECLINED' ? 'background: #d17a22!important;' : '' ]}">
+                    <h5 class="modal-title" id="mySmallModalLabel">
+                        {[ targetPurchase.status == 'STATUS_NOT_APPROVED' ? 'UNAPPROVED PURCHASE' : '' ]} {[ targetPurchase.status == 'STATUS_APPROVED'
+                        ? 'APPROVED PURCHASE' : '' ]} {[ targetPurchase.status == 'STATUS_DECLINED' ? 'DECLINED PURCHASE'
+                        : '' ]}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 drift-pane2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <fieldset class="form-group">
+                                        <label for="">Job</label>
+                                        <span> {[ targetPurchase.project.name ]} ({[ targetPurchase.project.number ]})</span>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6">
+                                    <fieldset class="form-group">
+                                        <label for="">Submitted By: </label>
+                                        <span> {[ targetPurchase.purchaser.user.first_name ]} {[ targetPurchase.purchaser.user.last_name
+                                            ]}
+                                        </span>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                    <fieldset class="form-group">
+                                        <label for="">Date of Purchase</label>
+                                        <span>{[ targetPurchase.date_of_purchase | date:'MM/dd/yyyy' ]}</span>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-12" data-ng-show="targetPurchase.vendor != null">
+                                    <fieldset class="form-group">
+                                        <label for="">Vendor:</label>
+                                        <span>{[ targetPurchase.vendor.name ]}</span>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                    <fieldset class="form-group">
+                                        <label for="">Payment Type</label>
+                                        <span>{[ targetPurchase.payment_type.name ]}</span>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                    <fieldset class="form-group">
+                                        <label for="">Total Amount</label>
+                                        <span>{[ targetPurchase.total_amount | currency ]}</span>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                    <fieldset class="form-group orange" data-ng-if="targetPurchase.status == 'STATUS_DECLINED'">
+                                        <label for="">Declined By {[targetPurchase.decliner.user.first_name]} {[targetPurchase.decliner.user.last_name]}
+                                            on {[targetPurchase.date_declined | date:'MM/dd/yyyy']}</label>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                    <fieldset class="form-group orange" data-ng-if="targetPurchase.status == 'STATUS_DECLINED' && targetPurchase.comments.length">
+                                        <label for="">Comments</label>
+                                        <span>{[ targetPurchase.comments ]}</span>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div style="text-align: right;margin-right: 20px;">
+                                <small style="color: #d17a22!important;">inclusive of sales tax ({[ (targetPurchase.is_override_sales_tax ? 0 : targetPurchase.sales_tax)
+                                    | currency ]}) {[targetPurchase.is_override_sales_tax ? '*' : '']}</small>
+                            </div>
+                            <div class="p-20" style="padding-top: 0!important;" data-ng-if="targetPurchase.purchase_items.length">
+                                <table class="table approver-table">
+                                    <tbody style="width: 100%;">
+                                        <tr class="thead-default">
+                                            <td></td>
+                                            <td>Cost Code</td>
+                                            <td>Amount
+                                                <small style="color: red;">inclusive of sales tax ({[ (isSalesTaxOverride ? 0 : targetPurchase.sales_tax)
+                                                    | currency ]}) {[isSalesTaxOverride ? '*' : '']}</small>
+                                            </td>
+                                        </tr>
+                                        <tr data-ng-repeat="pc in targetPurchase.purchase_items" data-ng-init="getSalesTaxCalculated(pc)">
+                                            <td></td>
+                                            <td data-ng-if="!pc.cost.hidden">{[ pc.cost.code_number ]} {[ pc.cost.description ]} {[ pc.cost.expense_type ]}</td>
+                                            <td data-ng-if="pc.cost.hidden">{[ pc.cost.description ]}</td>
+                                            <td style="text-align: right; ">
+                                                {[ pc.postAmount | currency ]}
+                                            </td>
+                                            <td class="memo">
+                                            <div style="white-space: normal;">{[ pc.memo ]}</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: right; font-weight: bold;">TOTAL:</td>
+                                            <td style="text-align: right; font-weight: bold;">{[ getTotalPostAmount(targetPurchase) | currency : "$" : 2 ]}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="p-20" style="padding-top: 0!important;" data-ng-if="targetPurchase.purchase_items.length">
+                                <table class="table">
+                                    <thead class="thead-default">
+                                        <tr>
+                                            <th>Cost Code</th>
+                                            <th style="text-align: right;">Amount </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-ng-repeat="pc in targetPurchase.purchase_items" data-ng-init="getSalesTaxCalculated(pc)">
+                                            <td data-ng-if="!pc.cost.hidden">{[ pc.cost.code_number ]} {[ pc.cost.description ]} {[ pc.cost.expense_type ]}</td>
+                                            <td data-ng-if="pc.cost.hidden">{[ pc.cost.description ]}</td>
+                                            <td style="text-align: right; ">{[ pc.postAmount | currency ]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: right; font-weight: bold;">TOTAL:</td>
+                                            <td style="text-align: right; font-weight: bold;">{[ getTotalPostAmount(targetPurchase) | currency : "$" : 2 ]}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <a class="text-center" style="text-align: center;">
+                                <img class="receipt-image2" data-ng-src="{[ targetPurchase.image ]}" data-zoom="{[ targetPurchase.image ]}" style="margin: 0 auto; max-height: calc(88vh - 200px);"
+                                    class="img-fluid">
+                                <p>(Click to Enlarge)</p>
+                            </a>
+                            {#
+                            <a class="text-center" data-ng-href="{{ vich_uploader_asset(targetPurchase, 'imageFile') }}" style="text-align: center;"
+                                data-toggle="lightbox">#} {#
+                                <img data-ng-src="{{ vich_uploader_asset(targetPurchase, 'imageFile') }}" style="height: 350px; margin: 0 auto;" class="img-fluid">#} {#
+                                <p>(Click to Enlarge)</p>#} {#
+                            </a>#}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" data-ng-if="targetPurchase.status == 'STATUS_NOT_APPROVED' && targetPurchase.date_imported == null" class="btn btn-secondary tertiary" data-ng-click="declinePurchase()">Decline</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="declineCommentPurchaseModal">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mySmallModalLabel">Confirm Declined Purchase</h5>
+                    <button style="top: -30px; position: relative;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span style="top: auto;" aria-hidden="true" data-dismiss="modal">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <textarea data-ng-model="comment" class="form-control" placeholder="Type a comment to the purchaser here" style="font-size: 18px;"
+                                rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary tertiary" data-ng-click="confirmDecline()">Confirm Decline</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="pendingPurchaseItem">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mySmallModalLabel">Proceed with Transaction?</h5>
+                    <button style="top: -30px; position: relative;" type="button" class="close" data-ng-click="cancelPurchaseAction()" aria-label="Close">
+                        <span style="top: auto;" aria-hidden="true" data-dismiss="modal">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>The Cost codes you have added will not be saved. To save this information, click cancel below,
+                                click the ADD NEW button, then click the Update Only or Approve Button. Clicking Close or
+                                the X button will not save any new information.</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-ng-click="cancelPurchaseAction()">Cancel</button>
+                    <button type="button" class="btn btn-secondary tertiary" data-ng-click="continuePurchaseAction()">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %} 
+{% block stylesheets %}
+<link href="{{ asset('css/switch.css') }}" rel="stylesheet" type="text/css" />
+<style>
+    .project-header {
+        text-align: center;
+        background: #315da6;
+        color: #FFF;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .project-header:hover {
+        background: #5082d6;
+    }
+
+    .project-header:active {
+        background: #000;
+    }
+
+    .purchase-table th:hover {
+        /*background: #315da6;
+            color: #FFF;*/
+        cursor: pointer;
+    }
+
+    .purchase-table th[data-ng-click]:hover {
+        cursor: pointer;
+    }
+
+    .purchase-table th[data-ng-click] i {
+        display: inline;
+    }
+
+    .purchase-table th[data-ng-click]:hover i {
+        display: inline !important;
+    }
+
+    .purchase-table th:active {
+        background: #000;
+        color: #FFF;
+    }
+
+    .ekko-lightbox .modal-dialog {
+        top: 100px;
+    }
+
+    .orange {
+        color: #d17a22;
+    }
+</style>
+{% endblock %} 
+{% block javascripts %}
+<script>
+    $(function () {
+        $('.dpicker').datepicker({
+            autoclose: true,
+            format: 'mm/dd/yyyy'
+        });
+
+        new Drift(document.querySelector('.receipt-image1'), {
+            paneContainer: document.querySelector('.drift-pane1')
+        });
+
+        new Drift(document.querySelector('.receipt-image2'), {
+            paneContainer: document.querySelector('.drift-pane2')
+        });
+    });
+</script>
+{% endblock %}

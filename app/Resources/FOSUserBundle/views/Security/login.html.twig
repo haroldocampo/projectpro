@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Project Pro">
+        <meta name="author" content="Harold Ocampo">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}Project Pro{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/pprologo.png') }}"/>
+    <link rel="stylesheet" href="{{ asset('uplon/assets/plugins/morris/morris.css') }}">
+    <link href="{{ asset('uplon/assets/plugins/switchery/switchery.min.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('uplon/assets/css/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('uplon/assets/public/stylesheets/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('uplon/assets/css/overrides.css') }}" rel="stylesheet" type="text/css"/>
+    <script src="{{ asset('uplon/assets/js/modernizr.min.js') }}"></script>
+</head>
+<body>
+
+
+    <!-- Navigation Bar-->
+    <header id="topnav">
+        <div class="topbar-main">
+            <div class="container">
+
+                <!-- LOGO -->
+                <div class="topbar-left">
+                    <a href="#" class="logo">
+                        <img src="{{ asset('images/logo-web-banner.png') }}"/>
+                    </a>
+                </div>
+                <!-- End Logo container-->
+
+
+                <div class="menu-extras">
+
+                    <ul class="nav navbar-nav pull-right">
+
+                        <li class="nav-item">
+                            <!-- Mobile menu toggle-->
+                            <a class="navbar-toggle">
+                                <div class="lines">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </a>
+                            <!-- End mobile menu toggle-->
+                        </li>
+
+
+                    </ul>
+
+                </div> <!-- end menu-extras -->
+                <div class="clearfix"></div>
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end topbar-main -->
+
+
+        {#<div class="navbar-custom">
+            <div class="container">
+                <div id="navigation">
+                    <!-- Navigation Menu-->
+                    <ul class="navigation-menu">
+                        <li>
+                            <a href="{{ path('fos_user_security_login') }}"><i class="zmdi zmdi-key"></i>
+                                <span> Login </span> </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('fos_user_registration_register') }}"><i class="zmdi zmdi-account"></i> <span> Register </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- End navigation menu  -->
+                </div>
+            </div>
+        </div>#}
+    </header>
+    <!-- End Navigation Bar-->
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="wrapper">
+        <div class="container">
+
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                </div>
+            </div>
+            <div class="row m-t-20">
+                <div class="col-xs-12 col-lg-6 col-lg-offset-3">
+                    <div class="card-box">
+
+                        <h2 class="m-t-0 m-b-20">Login</h2>
+                        {% if error %}
+                            {#<div class="alert alert-danger" role="alert">#}
+                            {#<strong>Oh snap!</strong> Change a few things up and try submitting again.#}
+                            {#</div>#}
+                            <div class="alert alert-danger" role="alert">
+                                <strong>{{ error.messageKey|trans(error.messageData, 'security') }}</strong>
+                            </div>
+                            {#<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+                        {% endif %}
+                        <form action="{{ path("fos_user_security_check") }}" method="post">
+                            {% if csrf_token %}
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                            {% endif %}
+                            <div class="form-group row">
+                                <label for="email" class="col-sm-2 form-control-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="email" placeholder="Email"
+                                           name="_username"
+                                           value="{{ last_username }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-sm-2 form-control-label">Password</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="password" placeholder="Password"
+                                           name="_password" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2"></label>
+                                <div class="col-sm-10">
+                                    <div class="pull-left"><span>Don't have an account? <a href="{{ path('fos_user_registration_register') }}">Sign up!</a></span>       
+                                        <h5 style="margin-top: 5px;">IT'S FREE!</h5>
+                                    </div>   
+                                    <div class="pull-right" style="text-align: right;">
+                                        <a href="{{ path('fos_user_resetting_request') }}">Forgot Password?</a>
+                                        <button type="submit" class="btn btn-primary" style="display: block;width: 100%;margin-top: 10px;">Login</button>
+                                    </div>
+                                    {#<div class="checkbox checkbox-primary">
+                                        <input id="rememberMe" type="checkbox" name="rememberMe">
+                                        <label for="rememberMe">
+                                            Keep me logged in for the day
+                                        </label>#}
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-10"></label>
+                        <div class="col-sm-2">
+                            {#<button type="submit" class="btn btn-primary pull-right">Login</button>#}
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div><!-- end col-->
+
+
+        </div>
+
+
+    </div> <!-- container -->
+
+
+
+    <!-- Footer -->
+    <footer class="footer text-right">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    2017 © ProjectPro
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+    <script>
+        var resizefunc = [];
+    </script>
+
+    <!-- jQuery  -->
+    <script src="{{ asset('uplon/assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/tether.min.js') }}"></script><!-- Tether for Bootstrap -->
+    <script src="{{ asset('uplon/assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/waves.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/jquery.nicescroll.js') }}"></script>
+    <script src="{{ asset('uplon/assets/plugins/switchery/switchery.min.js') }}"></script>
+
+    <!--Morris Chart-->
+    <script src="{{ asset('uplon/assets/plugins/morris/morris.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/plugins/raphael/raphael-min.js') }}"></script>
+
+    <!-- Counter Up  -->
+    <script src="{{ asset('uplon/assets/plugins/waypoints/lib/jquery.waypoints.min.js') }}"></script>
+    <script src="{{ asset('uplon/assets/plugins/counterup/jquery.counterup.min.js') }}"></script>
+
+    <!-- App js -->
+    <script src="{{ asset('uplon/assets/js/jquery.core.js') }}"></script>
+    <script src="{{ asset('uplon/assets/js/jquery.app.js') }}"></script>
+
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>
+
+
+
+
+

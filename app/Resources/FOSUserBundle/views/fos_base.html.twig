@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Project Pro">
+    <meta name="author" content="Harold Ocampo">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}Project Pro{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/pprologo.png') }}"/>
+    <link rel="stylesheet" href="{{ asset('uplon/assets/plugins/morris/morris.css') }}">
+    <link href="{{ asset('uplon/assets/plugins/switchery/switchery.min.css') }}s" rel="stylesheet"/>
+    <link href="{{ asset('uplon/assets/css/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('uplon/assets/public/stylesheets/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('uplon/assets/css/overrides.css') }}" rel="stylesheet" type="text/css"/>
+    <script src="{{ asset('uplon/assets/js/modernizr.min.js') }}"></script>
+</head>
+<body>
+
+
+<!-- Navigation Bar-->
+<header id="topnav">
+    <div class="topbar-main">
+        <div class="container">
+
+            <!-- LOGO -->
+            <div class="topbar-left">
+                <a href="{{ path('fos_user_security_login') }}" class="logo">
+                    <img src="{{ asset('images/logo-web-banner.png') }}"/>
+                </a>
+            </div>
+            <!-- End Logo container-->
+
+
+            <div class="menu-extras">
+
+                <ul class="nav navbar-nav pull-right">
+
+                    <li class="nav-item">
+                        <!-- Mobile menu toggle-->
+                        <a class="navbar-toggle">
+                            <div class="lines">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </a>
+                        <!-- End mobile menu toggle-->
+                    </li>
+
+
+                </ul>
+
+            </div> <!-- end menu-extras -->
+            <div class="clearfix"></div>
+
+        </div> <!-- end container -->
+    </div>
+    <!-- end topbar-main -->
+
+
+    <div class="navbar-custom">
+        <div class="container">
+            <div id="navigation">
+                <!-- Navigation Menu-->
+                <ul class="navigation-menu">
+                    {#
+                    <li>
+                        <a href="{{ path('fos_user_security_login') }}"><i class="zmdi zmdi-key"></i>
+                            <span> Login </span> </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('fos_user_registration_register') }}"><i class="zmdi zmdi-account"></i> <span> Register </span>
+                        </a>
+                    </li>
+                    #}
+                </ul>
+                <!-- End navigation menu  -->
+            </div>
+        </div>
+    </div>
+</header>
+<!-- End Navigation Bar-->
+
+{% block content %}
+
+{% endblock %}
+
+
+<!-- Footer -->
+<footer class="footer text-right">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                2017 © ProjectPro
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer -->
+
+<script>
+    var resizefunc = [];
+</script>
+
+<!-- jQuery  -->
+<script src="{{ asset('uplon/assets/js/jquery.min.js') }}"></script>
+<script src="{{ asset('uplon/assets/js/tether.min.js') }}"></script><!-- Tether for Bootstrap -->
+<script src="{{ asset('uplon/assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('uplon/assets/js/waves.js') }}"></script>
+<script src="{{ asset('uplon/assets/js/jquery.nicescroll.js') }}"></script>
+<script src="{{ asset('uplon/assets/plugins/switchery/switchery.min.js') }}"></script>
+
+<!--Morris Chart-->
+<script src="{{ asset('uplon/assets/plugins/morris/morris.min.js') }}"></script>
+<script src="{{ asset('uplon/assets/plugins/raphael/raphael-min.js') }}"></script>
+
+<!-- Counter Up  -->
+<script src="{{ asset('uplon/assets/plugins/waypoints/lib/jquery.waypoints.min.js') }}"></script>
+<script src="{{ asset('uplon/assets/plugins/counterup/jquery.counterup.min.js') }}"></script>
+
+<!-- App js -->
+<script src="{{ asset('uplon/assets/js/jquery.core.js') }}"></script>
+<script src="{{ asset('uplon/assets/js/jquery.app.js') }}"></script>
+
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>
+

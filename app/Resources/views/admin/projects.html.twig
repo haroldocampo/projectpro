@@ -1,0 +1,259 @@
+{% extends 'base.html.twig' %}
+{% block pageheader %}Projects{% endblock %}
+{% block body %}
+    <div data-ng-controller="ProjectsController">
+        <div class="row m-b-20">
+            <div class="col-xs-12">
+                <button class="btn btn-success" data-toggle="modal" data-target="#addProjectModal">Add Project</button>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card-box">
+
+                    <h3>Projects</h3>
+                    <div class="p-20">
+                        <table class="table">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Project Name</th>
+                                    <th>Date Submitted</th>
+                                    <th>Project Number</th>
+                                    <th>Payment Type</th>
+                                    <th>Submitted By</th>
+                                    <th>Approver</th>
+                                    <th>Date Approved</th>
+                                    <th>Date Exported</th>
+                                    <th style="width: 70px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="p in projects">
+                                    <td>#</td>
+                                    <td>{[p.name]}</td>
+                                    <td>{[p.date_time_created | date:'medium']}</th>
+                                    <td>{[ p.number ]}</td>
+                                    <td>N/A</td>
+                                    <td>{[ p.company.name ]}</td>
+                                    <td>{[ p.approver.user.first_name ]} {[ p.approver.user.last_name ]}</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td style="width: 70px;">
+                                        <div class="btn-group pull-right">
+                                            <button type="button" class="btn btn-info btn-sm dropdown-toggle waves-effect waves-light"
+                                                    data-toggle="dropdown" aria-expanded="false">
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);" data-ng-click="loadProject(p.id)" >View/Edit</a>
+                                                <a class="dropdown-item" href="javascript:void(0);" data-ng-click="initBudgetUpload(p.id)" data-toggle="modal" data-target="#uploadBudgetDataModal">Upload Budget Data</a>
+                                                <a class="dropdown-item" href="javascript:void(0);" data-ng-click="deleteProject(p.id)" >Delete</a>
+
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="addProjectModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Add Project</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="alert alert-info" role="alert">
+                                <strong>STEP 1</strong> Fill up basic project information.
+                            </div>
+                            <input type="hidden" name="companyId" id="companyId" value="{{ companyId }}" />
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Project Name</label>
+                                <input data-ng-model="newProject.name" type="text" id="fos_user_registration_form_firstName" name="fos_user_registration_form[firstName]" required="required" maxlength="50" class="form-control" placeholder="Your desired project name">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Project Number</label>
+                                <input data-ng-model="newProject.number" type="text" id="fos_user_registration_form_lastName" name="fos_user_registration_form[lastName]" required="required" maxlength="50" class="form-control" placeholder="Your desired project number">
+                            </fieldset>
+                            <div class="alert alert-info" role="alert">
+                                <strong>STEP 2</strong> Assign an approver from your project. <br/> Select <strong>NOT LISTED</strong> if your approver is not shown.
+                            </div>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Assign Approver</label>
+                                <select class="form-control" data-ng-model="selectedApprover" data-ng-change='assignApprover(selectedApprover)'>
+                                    <option data-ng-repeat='a in approvers' value="{[ a.id ]}">{[ a.user.first_name ]} {[ a.user.last_name ]}</option>
+                                    <option value="0">Not Listed (Create New Approver)</option>
+                                </select>                            
+                            </fieldset>
+                            <fieldset class="form-group" data-ng-if="newProject.isNewApprover">
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-12">
+                                        <input placeholder="First Name" type="text" class="form-control" data-ng-model="newProject.approver.firstName"/>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12">
+                                        <input placeholder="Last Name" type="text" class="form-control" data-ng-model="newProject.approver.lastName"/>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12">
+                                        <input placeholder="Email" type="text" class="form-control" data-ng-model="newProject.approver.email"/>
+                                    </div>
+                                </div>                           
+                            </fieldset>
+                            <div data-ng-show="newProject.number.length">
+                                <div class="alert alert-info" role="alert">
+                                    <strong>STEP 3 (Optional)</strong> Download the budget template. This will then be uploaded again after you edit and fill up this file.
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 text-center">
+                                        <a data-ng-href="/api/download/budgetTemplate?projectName={[newProject.name]}&projectNumber={[newProject.number]}&projectManager={[selectedApprover]}" >
+                                            <button class="btn btn-success" type="button"><i class='zmdi zmdi-download zmdi-hc-fw'></i>  Download Budget Template</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" data-ng-click="addProject()" class="btn btn-primary">Add Project</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="targetProjectModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">{[ targetProject.name ]} - {[ targetProject.number ]}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="form-group">
+                            <label for="">Project Name</label>
+                            <input data-ng-model="targetProject.name" type="text" class="form-control" placeholder="Your desired project name">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="">Project Number</label>
+                            <input data-ng-model="targetProject.number" type="text" class="form-control" placeholder="Your desired project number">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="">Project Manager</label>
+                            <select class="form-control" data-ng-model="targetProject.approver" data-ng-options="a.id as (a.user.first_name + ' ' + a.user.last_name) for a in approvers">
+                                <!--option data-ng-repeat='a in approvers' value="{[ a.id ]}">{[ a.user.first_name ]} {[ a.user.last_name ]}</option-->
+                            </select>
+                        </fieldset>
+                        <div class="p-20" data-ng-if="targetProject.costs.length">
+                            <table class="table">
+                                <thead class="thead-default">
+                                    <tr>
+                                        <th>Allowed</th>
+                                        <th>Cost Code</th>
+                                        <th>Expense Type</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                        <th style="width: 70px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="c in targetProject.costs">
+                                        <td><input type="checkbox" data-ng-model="c.enabled"/></td>
+                                        <td>{[ c.code_number ]}</th>
+                                        <td>{[ c.expense_type ]}</td>
+                                        <td>{[ c.description ]}</td>
+                                        <td>{[ c.budget_amount ]}</td>
+                                        <td style="width: 70px;">
+                                            <div class="btn-group pull-right">
+                                                <button class="btn btn-success btn-sm" data-ng-click="deleteCost(c.id)">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><input type="text" class="form-control" data-ng-model="newCost.codeNumber" /></th>
+                                        <td><input type="text" class="form-control" data-ng-model="newCost.expenseType" /></td>
+                                        <td><input type="text" class="form-control" data-ng-model="newCost.description" /></td>
+                                        <td><input type="text" class="form-control" data-ng-model="newCost.budgetAmount" /></td>
+                                        <td style="width: 70px;">
+                                            <div class="btn-group pull-right">
+                                                <button class="btn btn-success btn-sm" data-ng-click="addNewCost()">Add</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div data-ng-if="!targetProject.costs.length" class="text-center">
+                            <div class="alert alert-info" role="alert">
+                                <strong>No Budget Data Detected</strong> Upload Budget Data to Add Costs.
+                            </div>
+                            <button class="btn btn-warning" data-ng-click="initBudgetUpload(targetProject.id)" data-toggle="modal" data-dismiss="modal" data-target="#uploadBudgetDataModal">Upload Budget Data</button>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="uploadBudgetDataModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel">Import Project Data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form id="uploadBudgetForm" action="{{ path('apiImportBudget') }}" method="POST" enctype="multipart/form-data">
+                        <div class="modal-body">
+
+                            <div class="alert alert-info" role="alert">
+                                <strong>Upload from Budget Template File</strong>
+                            </div>
+                            <fieldset class="form-group">
+                                <label for="exampleInputEmail1">Budget File:</label>
+                                <input  type="file" name="budgetFile" required="required" maxlength="50" class="form-control">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input id="uploadProjectId" type="hidden" name="projectId" value="6">
+                            </fieldset>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Upload Excel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

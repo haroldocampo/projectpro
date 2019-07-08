@@ -1,0 +1,9 @@
+<h3>Hello
+    <b>{% if user.firstName == '' %}{{ user.email }}{% else %}{{ user.firstName }}{% endif %}</b>,
+</h3>
+<p>Thank you for using ProjectPro. To get started, <a href="{{ passwordSetUrl }}">Click Here</a> to set your password.
+</p>
+
+<p>
+    <small>This message was intended for: {{ user.email }}</small>
+</p>

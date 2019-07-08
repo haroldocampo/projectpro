@@ -1,9 +1,11 @@
-# README #
+# Project Pro README #
 
-### What is this repository for? ###
+### What is in this repository? ###
 
 * For projectpro website and API
-* Beta Version
+* Built with PHP Symfony 2 and Angular
+* See /web folder for Front End scripts
+* See /src/AppBundle for Back End scripts
 
 ### How do I get set up? ###
 
@@ -13,7 +15,3 @@
 
 * Always remember to pull first before commiting/pushing to the repository
 * Does your local server feel sluggish? Try this `php bin/console cache:clear --no-warmup`
-
-### Who do I talk to? ###
-
-* Contact Mark/Harold
